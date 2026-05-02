@@ -1,0 +1,2595 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Assistant System — Beginner Tutorial</title>
+
+<!-- SEO + canonical -->
+<meta name="description" content="Obsidian + Claude Code 7-Day Setup 가이드. 박사·연구자용 AI 보조 시스템. 매일 1-2시간 · Monthly $1-2 · 로컬 우선.">
+<meta name="author" content="Jewoong Moon">
+<link rel="canonical" href="https://educatian.github.io/research-assistant-ai-workflow-en/">
+
+<!-- Open Graph (Facebook, LinkedIn, Discord, KakaoTalk) -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Research Assistant System — Beginner Tutorial">
+<meta property="og:description" content="Obsidian + Claude Code 7-day setup guide for PhDs and researchers — step-by-step, with diagrams.">
+<meta property="og:url" content="https://educatian.github.io/research-assistant-ai-workflow-en/">
+<meta property="og:image" content="https://educatian.github.io/research-assistant-ai-workflow-en/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A Research Assistant System for PhDs — beginner guide — Author 문제웅, The University of Alabama">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Research Assistant AI Workflow">
+<meta property="article:author" content="Jewoong Moon">
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Research Assistant System — Beginner Tutorial">
+<meta name="twitter:description" content="Obsidian + Claude Code 7-day setup guide for PhDs and researchers.">
+<meta name="twitter:image" content="https://educatian.github.io/research-assistant-ai-workflow-en/og.png">
+<meta name="twitter:image:alt" content="A Research Assistant System for PhDs — beginner guide">
+
+<!-- Discord embed color -->
+<meta name="theme-color" content="#2d7d6e">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500&family=Hahmlet:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<style>
+/* Adapted directly from open-design html-ppt-course-module skill tokens
+   (warm paper + teal-green accent), adjusted for long-form scrolling docs. */
+:root {
+  --bg: #fbfaf6;
+  --bg-soft: #f4f1e8;
+  --bg-rgb: 251,250,246;
+  --surface: #ffffff;
+  --surface-2: #f6f3ea;
+  --border: rgba(60,45,20,.12);
+  --border-strong: rgba(60,45,20,.24);
+  --text-1: #2a2418;
+  --text-2: #5a5140;
+  --text-3: #8a7f68;
+  --text-rgb: 42,36,24;
+  --accent:   #2d7d6e;   /* teal-green */
+  --accent-2: #d88a3a;   /* warm orange */
+  --accent-3: #c4593f;   /* rust */
+  --good: #4a7c59;
+  --warn: #d88a3a;
+  --bad:  #c4593f;
+  --grad: linear-gradient(135deg,#2d7d6e,#4ea893);
+  --shadow: 0 12px 30px rgba(60,45,20,.07);
+  --shadow-lg: 0 24px 60px rgba(60,45,20,.12);
+  --radius: 14px;
+  --radius-lg: 20px;
+
+  --serif: "Hahmlet", "Playfair Display", "Apple SD Gothic Neo", Georgia, serif;
+  --sans: "Pretendard Variable", "Pretendard", "Inter", -apple-system, "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", "IBM Plex Mono", "Cascadia Code", "D2Coding", Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-1);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "ss02", "cv01", "cv11";  /* Pretendard polish */
+  word-break: keep-all;        /* Korean line-break preserves words */
+  overflow-wrap: break-word;
+}
+body.dark {
+  --bg: #1c1812;
+  --bg-soft: #2a2418;
+  --surface: #2a2418;
+  --surface-2: #322a1d;
+  --border: rgba(244,241,232,.08);
+  --border-strong: rgba(244,241,232,.18);
+  --text-1: #f4f1e8;
+  --text-2: #c2b89f;
+  --text-3: #8a7f68;
+  --text-rgb: 244,241,232;
+}
+
+/* Masthead — course-module hero feel */
+.masthead {
+  padding: 96px 5vw 64px;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.masthead::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%);
+  pointer-events: none;
+}
+.mast-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+.mast-kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  margin-bottom: 24px;
+}
+.mast-kicker::before { content: "✦ "; color: var(--accent); }
+.mast-title {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: clamp(40px, 6vw, 76px);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  margin: 0 0 24px;
+  color: var(--text-1);
+}
+.mast-deck {
+  font-family: var(--sans);
+  font-size: clamp(17px, 1.5vw, 22px);
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--text-2);
+  margin: 0 0 28px;
+  max-width: 680px;
+}
+.mast-byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 40px;
+  padding: 12px 0;
+  border-top: 1px dashed var(--border);
+  border-bottom: 1px dashed var(--border);
+  max-width: 680px;
+}
+.byline-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 700;
+}
+.byline-name {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.005em;
+}
+.byline-aff {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text-2);
+}
+.byline-sep {
+  color: var(--text-3);
+  font-size: 12px;
+}
+.byline-mail {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent-2);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--accent-2);
+  padding-bottom: 1px;
+}
+.byline-mail:hover { color: var(--accent-3); border-color: var(--accent-3); }
+.mast-meta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  max-width: 760px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.mast-meta > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 24px 20px 0;
+  border-right: 1px dashed var(--border);
+}
+.mast-meta > div:last-child { border-right: none; }
+.mast-meta span {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 600;
+}
+.mast-meta strong {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* Layout — sidebar + main, course-module style */
+.layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 72px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 72px 5vw 96px;
+}
+
+/* TOC sidebar — mimics course-module .obj-list with ○/●/▸ progression */
+.toc {
+  position: sticky;
+  top: 20px;
+  align-self: start;
+  /* internal scroll when TOC exceeds viewport */
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-right: 1px solid var(--border);
+  padding: 4px 24px 16px 0;
+  /* Firefox scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+/* WebKit scrollbar — thin teal */
+.toc::-webkit-scrollbar { width: 4px; }
+.toc::-webkit-scrollbar-track { background: transparent; }
+.toc::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--accent) 50%, transparent);
+  border-radius: 2px;
+}
+.toc::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+.toc-brand {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.toc-brand::before { content: "✦"; color: var(--accent-2); font-size: 18px; }
+.toc-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-3);
+  margin: 0 0 14px;
+}
+.toc ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text-2);
+  line-height: 1.45;
+}
+.toc li {
+  padding: 7px 0 7px 22px;
+  position: relative;
+  border-bottom: 1px dashed var(--border);
+}
+.toc li::before {
+  content: "○";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  color: var(--accent);
+  font-size: 13px;
+  line-height: 1;
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+.toc li.lvl1 { font-weight: 600; }
+.toc li.lvl1::before { content: "●"; }
+.toc li.lvl2 { padding-left: 32px; font-size: 12px; }
+.toc li.lvl2::before { left: 12px; font-size: 10px; top: 8px; }
+.toc a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+  line-height: 1.4;
+  transition: color 0.15s;
+}
+.toc a:hover { color: var(--text-1); }
+.toc li:hover::before { color: var(--accent-2); }
+
+/* Active state — bullet becomes filled accent-2 (warm orange) */
+.toc li.has-active::before,
+.toc li:has(> a.active)::before {
+  content: "●";
+  color: var(--accent-2);
+  transform: scale(1.15);
+}
+.toc li.has-active,
+.toc li:has(> a.active) {
+  color: var(--text-1);
+  font-weight: 700;
+}
+.toc li.has-active > a,
+.toc li:has(> a.active) > a {
+  color: var(--accent-3);
+}
+.toc .num {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-3);
+  margin-right: 6px;
+}
+.toc-foot {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-3);
+}
+.toc-foot p { margin: 4px 0; }
+.toc-foot kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+/* Prose — academic but friendly */
+.prose {
+  max-width: 760px;
+  font-size: 17px;
+  line-height: 1.8;
+  counter-reset: section;
+}
+body.narrow .prose { max-width: 620px; }
+
+.prose h1 {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: clamp(36px, 4vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 64px 0 32px;
+  color: var(--text-1);
+}
+
+.prose h2 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  margin: 96px 0 24px;
+  color: var(--text-1);
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  position: relative;
+}
+.prose h2::before {
+  content: counter(section, decimal-leading-zero);
+  counter-increment: section;
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-2);
+  letter-spacing: 0.1em;
+  background: var(--surface-2);
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  flex: none;
+  position: relative;
+  top: -4px;
+}
+.prose h2::after {
+  content: "";
+  position: absolute;
+  bottom: -16px;
+  left: 0;
+  width: 72px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.prose h3 {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.005em;
+  margin: 48px 0 14px;
+  color: var(--text-1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.prose h3::before {
+  content: "";
+  width: 4px;
+  height: 18px;
+  background: var(--accent);
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.prose p { margin: 0 0 20px; color: var(--text-2); }
+.prose p strong { color: var(--text-1); font-weight: 700; }
+.prose em { font-style: italic; color: var(--text-2); }
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  transition: color 0.15s;
+}
+.prose a:hover { color: var(--accent-3); text-decoration-color: var(--accent-3); }
+.prose ul, .prose ol { margin: 0 0 20px; padding-left: 20px; color: var(--text-2); }
+.prose li { margin-bottom: 8px; }
+.prose ul li { list-style: none; position: relative; padding-left: 6px; }
+.prose ul li::before {
+  content: "○";
+  color: var(--accent);
+  position: absolute;
+  left: -16px;
+  top: 0;
+}
+.prose ol li::marker { color: var(--accent); font-weight: 600; }
+
+/* Inline code */
+.prose code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: var(--accent-3);
+}
+
+/* Block code — course-module dark warm-brown */
+.prose pre {
+  background: #2a2418;
+  color: #f4f1e8;
+  padding: 22px 26px;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  font-size: 13.5px;
+  line-height: 1.7;
+  margin: 24px 0;
+  font-family: var(--mono);
+  position: relative;
+  box-shadow: var(--shadow);
+}
+.prose pre::before {
+  content: "code";
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a7f68;
+}
+.prose pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* Wikilink chip — cream pill */
+.wikilink {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.84em;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+/* Tables — academic concept-box vibe */
+.prose table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 32px 0;
+  font-size: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.prose th, .prose td {
+  text-align: left;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.prose tr:last-child td { border-bottom: none; }
+.prose th {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 12px;
+  font-weight: 700;
+}
+.prose tr:hover td { background: color-mix(in srgb, var(--accent) 4%, transparent); }
+.prose td code { font-size: 12px; }
+
+/* Callouts — directly mirroring course-module .callout */
+.callout {
+  margin: 28px 0;
+  padding: 18px 24px;
+  border-left: 4px solid;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--surface-2);
+  font-size: 15.5px;
+  line-height: 1.7;
+}
+.callout-tip   { border-left-color: var(--accent-2); background: #fff8ed; }
+.callout-warn  { border-left-color: var(--accent-3); background: #fdf2ee; }
+.callout-check { border-left-color: var(--accent);   background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+
+/* Prompt-box: side-by-side natural-language alternative to raw commands.
+   Indigo/purple to distinguish from teal (TIP) / orange (WARN) / green (CHECK). */
+.prompt-box {
+  margin: 18px 0 28px;
+  border: 1.5px solid #9b7eb7;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, #9b7eb7 5%, var(--surface));
+  overflow: hidden;
+  position: relative;
+}
+.prompt-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #fff;
+  background: #9b7eb7;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.prompt-label .prompt-icon { font-size: 13px; }
+.prompt-box pre {
+  margin: 0;
+  padding: 18px 22px;
+  background: transparent;
+  color: var(--text-1);
+  border: none;
+  border-left: none;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+.prompt-box pre::before { content: none; }
+.prompt-box::after {
+  content: "📋 클릭해서 복사";
+  position: absolute;
+  bottom: 10px;
+  right: 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: #9b7eb7;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.prompt-box.copied::after { content: "✓ 복사됨"; opacity: 1; color: var(--accent); }
+.prompt-box pre { cursor: pointer; }
+
+.callout strong {
+  color: var(--text-1);
+  font-weight: 700;
+}
+.callout-tip strong b, .callout-tip > b { color: var(--accent-2); }
+
+.cb {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin-right: 12px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  vertical-align: 1px;
+}
+.callout-tip .cb   { background: var(--accent-2); color: #fff; }
+.callout-warn .cb  { background: var(--accent-3); color: #fff; }
+.callout-check .cb { background: var(--accent);   color: #fff; }
+
+/* Day exercise blocks — auto-detect "Day N —" h2 sections */
+.prose h2[id^="day-"]::before { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* Concept callout (the > with no emoji prefix becomes a regular blockquote) */
+.prose blockquote {
+  margin: 28px 0;
+  padding: 20px 26px;
+  border-left: 4px solid var(--accent);
+  background: var(--surface);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-family: var(--serif);
+  font-size: 17px;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--text-2);
+  box-shadow: var(--shadow);
+}
+.prose blockquote strong {
+  font-style: normal;
+  color: var(--accent);
+  font-family: var(--sans);
+  font-weight: 700;
+}
+.prose blockquote p:last-child { margin-bottom: 0; }
+
+/* Diagrams — concept-box style cards */
+.diagram {
+  margin: 40px 0;
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  position: relative;
+}
+.diagram::before {
+  content: "FIG";
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-3);
+}
+.diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+.diagram figcaption {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--text-2);
+  margin: 20px 0 0;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border);
+  text-align: center;
+}
+
+.diagram-hero {
+  margin: 0 -5vw 64px;
+  padding: 0;
+  background: linear-gradient(135deg, #2a2418 0%, #3a2f1c 100%);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.diagram-hero::before { display: none; }
+
+.diagram-pair {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 20px;
+  align-items: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+}
+.diagram-pair::before { display: none; }
+.pair-side {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 20px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.pair-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  background: var(--text-3);
+  color: var(--surface);
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 3px;
+  margin-bottom: 14px;
+}
+.pair-arrow {
+  font-family: var(--serif);
+  font-size: 36px;
+  color: var(--accent-2);
+  text-align: center;
+}
+.pair-caption {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  text-align: center;
+  margin: 14px 0 0;
+  color: var(--text-2);
+}
+
+/* Day exercise / phase divider — show 7-day timeline at top of each day */
+.prose h2[id^="day-"] {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 8%, var(--bg)), transparent);
+  padding: 16px 20px 16px 0;
+  margin-left: -20px;
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+
+/* Closing */
+.closing {
+  margin-top: 120px;
+  padding: 56px 40px;
+  background: var(--surface-2);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  border-top: 4px solid var(--accent);
+}
+.closing-mark {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 26px;
+  color: var(--accent);
+  margin-bottom: 12px;
+  letter-spacing: 0.02em;
+}
+.closing-mark::before, .closing-mark::after { content: "✦"; color: var(--accent-2); margin: 0 12px; font-style: normal; }
+.closing-note {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--text-2);
+}
+.closing-author {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  align-items: baseline;
+  font-size: 13px;
+  color: var(--text-2);
+}
+.closing-author-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 700;
+}
+.closing-author strong {
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.closing-author a {
+  color: var(--accent-2);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 12px;
+  border-bottom: 1px dashed var(--accent-2);
+}
+.closing-author a:hover { color: var(--accent-3); border-color: var(--accent-3); }
+
+/* Footer */
+.bottom {
+  border-top: 1px solid var(--border);
+  background: #2a2418;
+  color: #f4f1e8;
+  padding: 32px 5vw;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.bottom-inner {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1280px;
+  margin: 0 auto;
+  align-items: center;
+}
+.bottom-inner span:first-child::before {
+  content: "✦";
+  color: var(--accent-2);
+  margin-right: 8px;
+}
+
+/* Subtle paper texture (optional) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 25% 20%, rgba(216,138,58,0.02), transparent 40%),
+    radial-gradient(circle at 75% 80%, rgba(45,125,110,0.02), transparent 40%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; gap: 40px; padding-top: 48px; }
+  .toc { position: static; padding-right: 0; border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+  .mast-meta { grid-template-columns: repeat(2, 1fr); }
+  .mast-meta > div:nth-child(2) { border-right: none; }
+  .diagram-pair { grid-template-columns: 1fr; }
+  .pair-arrow { transform: rotate(90deg); padding: 12px 0; }
+  .bottom-inner { flex-direction: column; gap: 12px; align-items: flex-start; }
+  .diagram-hero { margin-left: -5vw; margin-right: -5vw; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="mast-inner">
+    <div class="mast-kicker">VOL.01 · BEGINNER · 2026 SPRING</div>
+    <h1 class="mast-title">Research Assistant System — Beginner Tutorial</h1>
+    <p class="mast-deck">Obsidian + Claude Code · 7-Day Setup Guide — step-by-step, with diagrams.</p>
+    <div class="mast-byline">
+      <span class="byline-label">by</span>
+      <span class="byline-name">Jewoong Moon</span>
+      <span class="byline-sep">·</span>
+      <span class="byline-aff">The University of Alabama</span>
+      <span class="byline-sep">·</span>
+      <a class="byline-mail" href="mailto:jmoon19@ua.edu">jmoon19@ua.edu</a>
+    </div>
+    <div class="mast-meta">
+      <div><span>Total</span><strong>7일</strong></div>
+      <div><span>Per day</span><strong>1-2시간</strong></div>
+      <div><span>Monthly</span><strong>$1-2</strong></div>
+      <div><span>대상</span><strong>PhD / researcher</strong></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="toc">
+    <div class="toc-label">Contents</div>
+    <ol><li class="lvl1"><a href="#a-research-assistant-system-for-phds-and-researchers-beginne"><span class="num">01</span> A Research Assistant System for PhDs and Researchers — Beginner Guide</a></li>
+<li class="lvl2"><a href="#why-bother"><span class="num">02</span> Why bother?</a></li>
+<li class="lvl2"><a href="#0-glossary-7-terms-used-throughout"><span class="num">03</span> 0. Glossary — 7 terms used throughout</a></li>
+<li class="lvl2"><a href="#05-ai-agents-claude-code-vs-codex"><span class="num">04</span> 0.5. AI Agents — Claude Code vs Codex</a></li>
+<li class="lvl2"><a href="#1-the-core-idea-a-3-layer-second-brain"><span class="num">05</span> 1. The core idea — a 3-layer second brain</a></li>
+<li class="lvl2"><a href="#2-automation-flow-what-happens-every-2-hours"><span class="num">06</span> 2. Automation flow — &quot;what happens every 2 hours&quot;</a></li>
+<li class="lvl2"><a href="#3-prerequisites"><span class="num">07</span> 3. Prerequisites</a></li>
+<li class="lvl2"><a href="#35-cli-installation-claude-code-amp-codex"><span class="num">08</span> 3.5. CLI Installation — Claude Code &amp;amp; Codex</a></li>
+<li class="lvl2"><a href="#day-1-create-your-vault"><span class="num">09</span> Day 1 — Create your vault</a></li>
+<li class="lvl2"><a href="#day-2-todaymd-single-entry-point"><span class="num">10</span> Day 2 — Today.md (single entry point)</a></li>
+<li class="lvl2"><a href="#day-3-connect-claude-code-auto-session-log"><span class="num">11</span> Day 3 — Connect Claude Code + auto session log</a></li>
+<li class="lvl2"><a href="#day-4-the-every-2-hour-automated-tracker"><span class="num">12</span> Day 4 — The every-2-hour automated tracker</a></li>
+<li class="lvl2"><a href="#day-5-ontology"><span class="num">13</span> Day 5 — Ontology</a></li>
+<li class="lvl2"><a href="#day-6-llm-detects-changes-in-your-notes"><span class="num">14</span> Day 6 — LLM detects changes in your notes</a></li>
+<li class="lvl2"><a href="#day-7-slides-auto-generate-presentations"><span class="num">15</span> Day 7 — /slides — auto-generate presentations</a></li>
+<li class="lvl2"><a href="#after-7-days-daily-rhythm"><span class="num">16</span> After 7 days — daily rhythm</a></li>
+<li class="lvl2"><a href="#real-scenarios-when-this-is-most-useful"><span class="num">17</span> Real scenarios — when this is most useful</a></li>
+<li class="lvl2"><a href="#common-pitfalls-troubleshooting"><span class="num">18</span> Common pitfalls (troubleshooting)</a></li>
+<li class="lvl2"><a href="#customizing-log-every-change-as-a-note"><span class="num">19</span> Customizing — log every change as a note</a></li>
+<li class="lvl2"><a href="#core-principles"><span class="num">20</span> Core principles</a></li></ol>
+    <div class="toc-foot">
+      <p>Keyboard</p>
+      <p><kbd>F</kbd> narrow · <kbd>D</kbd> dark mode</p>
+    </div>
+  </aside>
+  <article class="prose">
+    <p>
+<figure class="diagram diagram-hero">
+<svg viewBox="0 0 800 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="7-day journey timeline" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a2418"/>
+      <stop offset="1" stop-color="#3a2f1c"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.5" r="0.7">
+      <stop offset="0" stop-color="#d88a3a" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#d88a3a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="240" fill="url(#hg)"/>
+  <ellipse cx="400" cy="125" rx="380" ry="110" fill="url(#halo)"/>
+
+  <!-- top kicker -->
+  <g fill="#f4f1e8">
+    <text x="400" y="40" text-anchor="middle" font-size="11" font-family="JetBrains Mono, monospace" letter-spacing="4" opacity="0.5">✦ A 7-DAY JOURNEY ✦</text>
+  </g>
+
+  <!-- timeline base line -->
+  <line x1="78" y1="125" x2="722" y2="125" stroke="#f4f1e8" stroke-width="1" stroke-opacity="0.18" stroke-dasharray="2 4"/>
+
+  <!-- 7 milestone groups, evenly spaced cx = 78 + i * 107.33 -->
+  <g font-family="Pretendard Variable, Pretendard, Inter, sans-serif" fill="#f4f1e8">
+
+    <!-- Day 1: Vault (folder icon) -->
+    <g transform="translate(78,125)">
+      <circle r="26" fill="#2a2418" stroke="#2d7d6e" stroke-width="2"/>
+      <path d="M -10,-6 L -2,-6 L 0,-3 L 10,-3 L 10,7 L -10,7 Z" fill="none" stroke="#2d7d6e" stroke-width="1.5" stroke-linejoin="round"/>
+      <text x="0" y="-44" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" letter-spacing="2" fill="#d88a3a">DAY 1</text>
+      <text x="0" y="50" text-anchor="middle" font-size="14" font-weight="700">Vault</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">First entity</text>
+    </g>
+
+    <!-- Day 2: Today (page icon) -->
+    <g transform="translate(185,125)">
+      <circle r="26" fill="#2a2418" stroke="#d88a3a" stroke-width="2"/>
+      <rect x="-8" y="-9" width="16" height="18" fill="none" stroke="#d88a3a" stroke-width="1.5"/>
+      <line x1="-5" y1="-4" x2="5" y2="-4" stroke="#d88a3a" stroke-width="1"/>
+      <line x1="-5" y1="0" x2="5" y2="0" stroke="#d88a3a" stroke-width="1"/>
+      <line x1="-5" y1="4" x2="2" y2="4" stroke="#d88a3a" stroke-width="1"/>
+      <text x="0" y="-44" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" letter-spacing="2" fill="#d88a3a">DAY 2</text>
+      <text x="0" y="50" text-anchor="middle" font-size="14" font-weight="700">Today.md</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">Entry point</text>
+    </g>
+
+    <!-- Day 3: Claude (chat icon) -->
+    <g transform="translate(292,125)">
+      <circle r="26" fill="#2a2418" stroke="#9b7eb7" stroke-width="2"/>
+      <path d="M -9,-5 Q -9,-9 -5,-9 L 5,-9 Q 9,-9 9,-5 L 9,2 Q 9,6 5,6 L 0,6 L -3,9 L -3,6 L -5,6 Q -9,6 -9,2 Z" fill="none" stroke="#9b7eb7" stroke-width="1.5" stroke-linejoin="round"/>
+      <text x="0" y="-44" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" letter-spacing="2" fill="#d88a3a">DAY 3</text>
+      <text x="0" y="50" text-anchor="middle" font-size="14" font-weight="700">Claude Code</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">Stop hook 연결</text>
+    </g>
+
+    <!-- Day 4: Tracker (clock icon) -->
+    <g transform="translate(400,125)">
+      <circle r="30" fill="#d88a3a" opacity="0.15"/>
+      <circle r="26" fill="#2a2418" stroke="#d88a3a" stroke-width="2.5"/>
+      <circle cx="0" cy="0" r="9" fill="none" stroke="#d88a3a" stroke-width="1.5"/>
+      <line x1="0" y1="0" x2="0" y2="-6" stroke="#d88a3a" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="5" y2="2" stroke="#d88a3a" stroke-width="1.5" stroke-linecap="round"/>
+      <text x="0" y="-44" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" letter-spacing="2" fill="#d88a3a">DAY 4</text>
+      <text x="0" y="50" text-anchor="middle" font-size="14" font-weight="700">Tracker</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">Every 2 hours</text>
+    </g>
+
+    <!-- Day 5: Ontology (graph icon) -->
+    <g transform="translate(508,125)">
+      <circle r="26" fill="#2a2418" stroke="#4ea893" stroke-width="2"/>
+      <circle cx="-7" cy="-4" r="2.5" fill="#4ea893"/>
+      <circle cx="7" cy="-4" r="2.5" fill="#4ea893"/>
+      <circle cx="0" cy="6" r="2.5" fill="#4ea893"/>
+      <line x1="-7" y1="-4" x2="7" y2="-4" stroke="#4ea893" stroke-width="1"/>
+      <line x1="-7" y1="-4" x2="0" y2="6" stroke="#4ea893" stroke-width="1"/>
+      <line x1="7" y1="-4" x2="0" y2="6" stroke="#4ea893" stroke-width="1"/>
+      <text x="0" y="-44" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" letter-spacing="2" fill="#d88a3a">DAY 5</text>
+      <text x="0" y="50" text-anchor="middle" font-size="14" font-weight="700">Ontology</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">Knowledge graph</text>
+    </g>
+
+    <!-- Day 6: Watch (eye icon) -->
+    <g transform="translate(615,125)">
+      <circle r="26" fill="#2a2418" stroke="#c4593f" stroke-width="2"/>
+      <path d="M -10,0 Q 0,-7 10,0 Q 0,7 -10,0 Z" fill="none" stroke="#c4593f" stroke-width="1.5"/>
+      <circle cx="0" cy="0" r="3" fill="#c4593f"/>
+      <text x="0" y="-44" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" letter-spacing="2" fill="#d88a3a">DAY 6</text>
+      <text x="0" y="50" text-anchor="middle" font-size="14" font-weight="700">Situation</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">Change detection</text>
+    </g>
+
+    <!-- Day 7: Slides (deck icon) -->
+    <g transform="translate(722,125)">
+      <circle r="26" fill="#2a2418" stroke="#e8a770" stroke-width="2"/>
+      <rect x="-9" y="-3" width="14" height="9" fill="none" stroke="#e8a770" stroke-width="1.5"/>
+      <rect x="-7" y="-6" width="14" height="9" fill="none" stroke="#e8a770" stroke-width="1.2" opacity="0.7"/>
+      <rect x="-5" y="-9" width="14" height="9" fill="none" stroke="#e8a770" stroke-width="1" opacity="0.4"/>
+      <text x="0" y="-44" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" letter-spacing="2" fill="#d88a3a">DAY 7</text>
+      <text x="0" y="50" text-anchor="middle" font-size="14" font-weight="700">/slides</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">Slide gen</text>
+    </g>
+  </g>
+
+  <!-- bottom subtitle -->
+  <g fill="#f4f1e8">
+    <text x="400" y="218" text-anchor="middle" font-size="11" font-family="JetBrains Mono, monospace" letter-spacing="3" opacity="0.45">1-2 hours/day · ~$2/month · local-first · BYOK</text>
+  </g>
+</svg>
+</figure>
+</p>
+<h1 id="a-research-assistant-system-for-phds-and-researchers-beginne">A Research Assistant System for PhDs and Researchers — Beginner Guide</h1>
+<blockquote>
+<p><strong>Who is this for?</strong> You're a PhD student, early-career faculty, or researcher juggling <em>dozens of projects scattered across folders</em>; you keep searching <em>"when was that grant deadline again?"</em>; and although you use Claude Code/ChatGPT, you find yourself <em>re-explaining the same context every session</em>. This guide is for you.</p>
+<p><strong>End state</strong>: every project, methodology, student, and grant lives in a single searchable knowledge graph. The AI auto-records what you do every session. New information triggers automatic graph updates.</p>
+</blockquote>
+<hr />
+<h2 id="why-bother">Why bother?</h2>
+<p>Your current setup probably looks like this:</p>
+<p>
+<figure class="diagram diagram-pair">
+  <div class="pair-side pair-before">
+    <div class="pair-label">BEFORE</div>
+    <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="280" height="200" fill="#f1f3f5" stroke="#ccc"/>
+      <!-- scattered files -->
+      <g font-family="IBM Plex Mono, monospace" font-size="9" fill="#0a1f3d">
+        <rect x="20" y="20" width="60" height="14" fill="#fff" stroke="#999"/><text x="22" y="31">draft_v3.docx</text>
+        <rect x="120" y="35" width="55" height="14" fill="#fff" stroke="#999"/><text x="122" y="46">slides.pptx</text>
+        <rect x="200" y="15" width="50" height="14" fill="#fff" stroke="#999"/><text x="202" y="26">notes.txt</text>
+        <rect x="60" y="65" width="48" height="14" fill="#fff" stroke="#999"/><text x="62" y="76">draft_v4.docx</text>
+        <rect x="160" y="80" width="60" height="14" fill="#fff" stroke="#999"/><text x="162" y="91">screenshot.png</text>
+        <rect x="20" y="105" width="55" height="14" fill="#fff" stroke="#999"/><text x="22" y="116">grant.docx</text>
+        <rect x="100" y="120" width="60" height="14" fill="#fff" stroke="#999"/><text x="102" y="131">data.csv</text>
+        <rect x="200" y="105" width="50" height="14" fill="#fff" stroke="#999"/><text x="202" y="116">v5.docx</text>
+        <rect x="40" y="150" width="60" height="14" fill="#fff" stroke="#999"/><text x="42" y="161">paper2.pdf</text>
+        <rect x="140" y="155" width="55" height="14" fill="#fff" stroke="#999"/><text x="142" y="166">final.docx</text>
+        <rect x="210" y="150" width="50" height="14" fill="#fff" stroke="#999"/><text x="212" y="161">edit.md</text>
+        <rect x="20" y="175" width="50" height="14" fill="#fff" stroke="#999"/><text x="22" y="186">log.txt</text>
+      </g>
+      <text x="140" y="14" text-anchor="middle" font-family="Inter, sans" font-size="9" fill="#999">Desktop\</text>
+    </svg>
+    <p class="pair-caption">Desktop = a graveyard you must search</p>
+  </div>
+  <div class="pair-arrow">→</div>
+  <div class="pair-side pair-after">
+    <div class="pair-label" style="background: var(--rust); color: var(--paper);">AFTER</div>
+    <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="280" height="200" fill="#f1f3f5" stroke="#0a1f3d"/>
+      <!-- structured -->
+      <g font-family="Inter, sans" font-size="10" fill="#0a1f3d">
+        <rect x="14" y="14" width="252" height="22" fill="#0a1f3d"/>
+        <text x="22" y="29" fill="#f1f3f5" font-family="Playfair Display, serif" font-weight="700">Today.md</text>
+        <text x="200" y="29" fill="#facc15" font-family="IBM Plex Mono, monospace" font-size="9">D-12</text>
+
+        <rect x="14" y="44" width="120" height="50" fill="#fff" stroke="#0a1f3d"/>
+        <text x="22" y="58" font-weight="600">entities/</text>
+        <text x="22" y="72" font-size="9" fill="#666">Project A, B, C, …</text>
+        <text x="22" y="84" font-size="9" fill="#666">12 active</text>
+
+        <rect x="146" y="44" width="120" height="50" fill="#fff" stroke="#0a1f3d"/>
+        <text x="154" y="58" font-weight="600">concepts/</text>
+        <text x="154" y="72" font-size="9" fill="#666">methods, theory</text>
+        <text x="154" y="84" font-size="9" fill="#666">methodology</text>
+
+        <rect x="14" y="104" width="252" height="36" fill="#fff" stroke="#b5392a"/>
+        <text x="22" y="118" font-weight="600">situation/2026-05-02.md</text>
+        <text x="22" y="132" font-size="9" fill="#b5392a">[AUTO] Project A deadline → 2026-09-01</text>
+
+        <rect x="14" y="150" width="252" height="38" fill="#fff" stroke="#0a1f3d"/>
+        <text x="22" y="164" font-weight="600">_ontology.json + graph.html</text>
+        <g stroke="#3b82f6" stroke-width="1" fill="none">
+          <circle cx="40" cy="180" r="3" fill="#3b82f6"/>
+          <circle cx="80" cy="180" r="3" fill="#f59e0b"/>
+          <circle cx="120" cy="180" r="3" fill="#8b5cf6"/>
+          <circle cx="160" cy="180" r="3" fill="#10b981"/>
+          <line x1="43" y1="180" x2="77" y2="180"/>
+          <line x1="83" y1="180" x2="117" y2="180"/>
+          <line x1="123" y1="180" x2="157" y2="180"/>
+        </g>
+        <text x="180" y="183" font-size="9" fill="#666">queryable</text>
+      </g>
+    </svg>
+    <p class="pair-caption">vault = one entry page, no search</p>
+  </div>
+</figure>
+</p>
+<p><strong>Left</strong>: PDFs, docx, and PNGs scattered across the desktop. 16 project folders. <em>"Where did I write down that method explanation?"</em> — daily search.</p>
+<p><strong>Right</strong>: every project organized as a vault entity page. An automated tracker processes new notes. Asking the AI <em>"Tell me about Project X"</em> yields full context in one line.</p>
+<p>Follow this guide to the end and you reach the right side. <strong>1-2 hours per day for 7 days.</strong></p>
+<hr />
+<h2 id="0-glossary-7-terms-used-throughout">0. Glossary — 7 terms used throughout</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>One-line definition</th>
+<th>Analogy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Vault</strong></td>
+<td>An Obsidian notes store = a single folder full of <code>.md</code> files</td>
+<td>"The bookshelf with all my notes"</td>
+</tr>
+<tr>
+<td><strong>Entity page</strong></td>
+<td>A single note for one thing — person, project, concept (<code>wiki/entities/Project A.md</code>)</td>
+<td>One Wikipedia article</td>
+</tr>
+<tr>
+<td><strong>Frontmatter</strong></td>
+<td>YAML metadata between <code>---</code> lines at the top of a markdown file. The "label" area the computer reads</td>
+<td>Library catalog card inside the cover</td>
+</tr>
+<tr>
+<td><strong>Wikilink</strong></td>
+<td>Obsidian's <code>&lt;span class="wikilink"&gt;Page Name&lt;/span&gt;</code> syntax. Auto-tracked, auto-searchable</td>
+<td>Hyperlink within a wiki</td>
+</tr>
+<tr>
+<td><strong>Hook</strong></td>
+<td>A command that auto-fires the moment a specific event happens</td>
+<td>Doorbell — auto-rings when someone arrives</td>
+</tr>
+<tr>
+<td><strong>Ontology</strong></td>
+<td>A structured graph of your vault expressed as <strong>types</strong> and <strong>relations</strong></td>
+<td>Family tree + org chart, combined</td>
+</tr>
+<tr>
+<td><strong>API key</strong></td>
+<td>Secret string that authenticates you when calling an external LLM service</td>
+<td>Library card you show when borrowing</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **Concept-to-file mapping**:each entity is a single `.md` file. Frontmatter declares its *type* (`type: project`). Wikilinks declare *relations* to other entities. These three together let the system auto-build your ontology.</div>
+
+<hr />
+<h2 id="05-ai-agents-claude-code-vs-codex">0.5. AI Agents — Claude Code vs Codex</h2>
+<p>This system uses two AI coding agents <strong>complementarily</strong>. Both are LLM-backed, but <strong>what each does best</strong> and <strong>how you control them</strong> differ.</p>
+<p>
+<figure class="diagram">
+<svg viewBox="0 0 760 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Claude Code vs Codex roles">
+  <text x="20" y="22" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="2" fill="#8a7f68">AI AGENTS · role split</text>
+
+  <!-- Claude Code column -->
+  <g>
+    <rect x="20" y="40" width="350" height="160" rx="12" fill="#fff" stroke="#2d7d6e" stroke-width="2"/>
+    <text x="40" y="68" font-family="Pretendard Variable, Inter, sans-serif" font-size="18" font-weight="800" fill="#2d7d6e">Claude Code</text>
+    <text x="40" y="86" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="1.5" fill="#8a7f68">PRIMARY · Anthropic</text>
+
+    <g font-family="Pretendard Variable, Inter, sans-serif" font-size="12" fill="#2a2418">
+      <text x="40" y="112">✓ Stop hook auto (session digest)</text>
+      <text x="40" y="132">✓ Slash commands (/slides /recall)</text>
+      <text x="40" y="152">✓ MEMORY.md Auto 로드</text>
+      <text x="40" y="172">✓ CLAUDE.md parent-walked</text>
+      <text x="40" y="192">✓ 200K-1M context</text>
+    </g>
+  </g>
+
+  <!-- Codex column -->
+  <g>
+    <rect x="390" y="40" width="350" height="160" rx="12" fill="#fff" stroke="#d88a3a" stroke-width="2"/>
+    <text x="410" y="68" font-family="Pretendard Variable, Inter, sans-serif" font-size="18" font-weight="800" fill="#d88a3a">Codex</text>
+    <text x="410" y="86" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="1.5" fill="#8a7f68">SECONDARY · OpenAI</text>
+
+    <g font-family="Pretendard Variable, Inter, sans-serif" font-size="12" fill="#2a2418">
+      <text x="410" y="112">○ No hooks (manual codex_digest.ps1)</text>
+      <text x="410" y="132">○ AGENTS.md Auto 로드</text>
+      <text x="410" y="152">○ Sessions = ~/.codex/sessions/</text>
+      <text x="410" y="172">✓ Image gen / reasoning mode</text>
+      <text x="410" y="192">✓ VS Code IDE integration</text>
+    </g>
+  </g>
+
+  <!-- Connection to vault -->
+  <g stroke="#5a5140" stroke-width="1.2" fill="none" stroke-opacity="0.6">
+    <path d="M 195,200 Q 195,260 380,290" marker-end="url(#arrA)"/>
+    <path d="M 565,200 Q 565,260 380,290" marker-end="url(#arrA)"/>
+  </g>
+
+  <!-- Vault circle (center bottom) -->
+  <g>
+    <circle cx="380" cy="320" r="48" fill="#2a2418"/>
+    <text x="380" y="318" text-anchor="middle" font-family="Playfair Display, serif" font-size="20" font-weight="800" fill="#d88a3a">vault</text>
+    <text x="380" y="335" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#f4f1e8" opacity="0.7">wiki/*.md</text>
+  </g>
+
+  <!-- Side labels: CLI vs Desktop -->
+  <g font-family="JetBrains Mono, monospace" font-size="11" font-weight="700" letter-spacing="1.5">
+    <rect x="20" y="220" width="170" height="32" rx="6" fill="#fff8ed" stroke="#d88a3a"/>
+    <text x="105" y="241" text-anchor="middle" fill="#d88a3a">CLI · full features</text>
+    <rect x="200" y="220" width="170" height="32" rx="6" fill="color-mix(in srgb, #2d7d6e 6%, #fff)" stroke="#2d7d6e"/>
+    <text x="285" y="241" text-anchor="middle" fill="#2d7d6e">Desktop · MCP</text>
+  </g>
+  <g font-family="JetBrains Mono, monospace" font-size="11" font-weight="700" letter-spacing="1.5">
+    <rect x="390" y="220" width="170" height="32" rx="6" fill="#fff8ed" stroke="#d88a3a"/>
+    <text x="475" y="241" text-anchor="middle" fill="#d88a3a">CLI · session archive</text>
+    <rect x="570" y="220" width="170" height="32" rx="6" fill="color-mix(in srgb, #2d7d6e 6%, #fff)" stroke="#2d7d6e"/>
+    <text x="655" y="241" text-anchor="middle" fill="#2d7d6e">VS Code IDE</text>
+  </g>
+
+  <!-- bottom: rule of thumb -->
+  <g font-family="Pretendard Variable, Inter, sans-serif" font-size="12.5" fill="#2a2418">
+    <rect x="20" y="384" width="720" height="28" rx="8" fill="#f6f3ea" stroke="#5a5140" stroke-dasharray="3 3"/>
+    <text x="40" y="402" font-weight="700" fill="#5a5140">Rule:</text>
+    <text x="80" y="402" fill="#5a5140">vault Work·Auto화 hook = <tspan fill="#2d7d6e" font-weight="700">Claude Code CLI</tspan> · quick chat = <tspan fill="#2d7d6e" font-weight="700">Claude Desktop</tspan> · code backup = <tspan fill="#d88a3a" font-weight="700">Codex</tspan></text>
+  </g>
+
+  <defs>
+    <marker id="arrA" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#5a5140"/></marker>
+  </defs>
+</svg>
+<figcaption>Both agents see the same vault — different controls and strengths.</figcaption>
+</figure>
+</p>
+<h3 id="two-agents-two-roles">Two agents, two roles</h3>
+<p><strong>Claude Code</strong> (Anthropic) — <em>primary engineering agent</em>
+- Deep vault integration: Stop hooks for auto-session-recording, slash commands like <code>/slides</code> and <code>/recall</code>
+- Long context window (200K-1M tokens) — can pull your whole vault into context
+- Strengths: multi-step reasoning, careful file edits, vault navigation
+- Where: directly reads/writes every file in the vault</p>
+<p><strong>Codex</strong> (OpenAI) — <em>secondary engineering agent</em>
+- Sessions stored at <code>~/.codex/sessions/</code> (rollout JSONL). No Stop hook — manual <code>pwsh codex_digest.ps1</code> after each session
+- Strengths: fast code generation, image generation, reasoning-mode
+- Where: green-field code, cross-checking when Claude is stuck, prototypes</p>
+<h3 id="when-to-use-which">When to use which</h3>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Pick</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Writing/editing vault pages</strong></td>
+<td><strong>Claude Code CLI</strong> — Stop hook auto-records</td>
+</tr>
+<tr>
+<td><strong>New scripting</strong> (Python/PowerShell)</td>
+<td>Either</td>
+</tr>
+<tr>
+<td><strong>Multi-file refactor</strong></td>
+<td><strong>Claude Code</strong> — multi-step edits stable</td>
+</tr>
+<tr>
+<td><strong>Second opinion when stuck</strong></td>
+<td>Both, compare answers</td>
+</tr>
+<tr>
+<td><strong>Image / mockup generation</strong></td>
+<td><strong>Codex</strong> — has image_generation tool</td>
+</tr>
+<tr>
+<td><strong>Quick chat / "what is this?"</strong></td>
+<td><strong>Claude Desktop app</strong> (GUI, MCP)</td>
+</tr>
+<tr>
+<td><strong>Auto session digest</strong></td>
+<td><strong>Claude Code</strong> (auto). Codex is manual</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cli-control-the-5-essentials">CLI control — the 5 essentials</h3>
+<p><strong>(1) Where to run for auto-context</strong></p>
+<pre><code class="language-powershell">cd C:\Users\&lt;you&gt;\ObsidianVault
+claude                              # Claude Code CLI
+# or
+codex                               # Codex CLI
+</code></pre>
+<p>Both agents walk <em>up the parent chain</em> looking for:
+- Claude Code: <code>CLAUDE.md</code>
+- Codex: <code>AGENTS.md</code></p>
+<p>So opening either inside your vault means <em>"tell me about project X"</em> gets answered immediately.</p>
+<p><strong>(2) Hook registration — Claude Code only</strong></p>
+<p><code>~\.claude\settings.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;hooks&quot;: {
+    &quot;Stop&quot;: [
+      {
+        &quot;matcher&quot;: &quot;*&quot;,
+        &quot;hooks&quot;: [{
+          &quot;type&quot;: &quot;command&quot;,
+          &quot;command&quot;: &quot;powershell.exe -File &lt;vault&gt;\\scripts\\save_session.ps1 -Source claude&quot;
+        }]
+      }
+    ]
+  }
+}
+</code></pre>
+<p>Available events: <code>Stop</code>, <code>SessionStart</code>, <code>PostToolUse</code>, <code>PreToolUse</code>, <code>UserPromptSubmit</code>. We only use <code>Stop</code>.</p>
+<p><strong>(3) Slash Commands — Claude Code only</strong></p>
+<p>Create <code>~\.claude\commands\&lt;name&gt;.md</code> and call as <code>/&lt;name&gt; &lt;args&gt;</code>. Example: <code>/slides ProjectA</code>.</p>
+<p><strong>(4) Memory — Claude Code's auto-context</strong></p>
+<p><code>~\.claude\projects\&lt;machine&gt;\memory\MEMORY.md</code> is auto-injected at every session start.</p>
+<p><strong>(5) Codex post-session digest — three approaches</strong></p>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **Correction**:Codex CLI has no event-based hook system. It *does* support schedule-based cron at `~/.codex/automations/`. Three ways to get the same effect:</div>
+
+<p><strong>Method A — manual</strong>: <code>pwsh C:\Users\&lt;you&gt;\ObsidianVault\scripts\codex_digest.ps1</code></p>
+<p><strong>Method B — shell wrapper</strong>:</p>
+<pre><code class="language-powershell">function cdx {
+  codex @args
+  pwsh &quot;$env:USERPROFILE\ObsidianVault\scripts\codex_digest.ps1&quot;
+}
+</code></pre>
+<p><strong>Method C — Codex automation</strong>:</p>
+<pre><code class="language-toml"># ~/.codex/automations/vault-digest/automation.toml
+version = 1
+id = &quot;vault-digest&quot;
+kind = &quot;cron&quot;
+prompt = &quot;Run: pwsh C:\\Users\\&lt;you&gt;\\ObsidianVault\\scripts\\codex_digest.ps1&quot;
+status = &quot;ACTIVE&quot;
+rrule = &quot;FREQ=HOURLY;INTERVAL=2&quot;
+</code></pre>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **Bottom line**:~95% interchangeable. Same vault, same entity pages.</div>
+
+<h3 id="desktop-app-differences">Desktop app differences</h3>
+<p><strong>Claude Desktop</strong>: no hooks, has MCP, no slash commands. Recommended for quick chat.
+<strong>Codex Desktop</strong>: no hooks, IDE-integrated. Recommended for in-IDE coding.</p>
+<div class="callout callout-warn"><span class="cb">⚠ WATCH OUT</span> **Hook-required automation must use CLI**.</div>
+
+<hr />
+<h2 id="1-the-core-idea-a-3-layer-second-brain">1. The core idea — a 3-layer second brain</h2>
+<p>
+<figure class="diagram">
+<svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three-layer mental model">
+  <!-- layer 1: project knowledge -->
+  <g>
+    <rect x="60" y="20" width="640" height="70" rx="8" fill="#2d7d6e" opacity="0.08" stroke="#2d7d6e" stroke-width="1.5"/>
+    <text x="80" y="44" font-family="Playfair Display, serif" font-weight="700" font-size="17" fill="#2a2418">Layer 1 · Project knowledge</text>
+    <text x="80" y="62" font-family="Inter, sans" font-size="11.5" fill="#5a5140">Notes you write yourself. Permanent.</text>
+    <g font-family="JetBrains Mono, monospace" font-size="10" fill="#2a2418">
+      <rect x="320" y="48" width="110" height="26" rx="4" fill="#fff" stroke="#2d7d6e"/>
+      <text x="330" y="65">wiki/entities/</text>
+      <rect x="440" y="48" width="110" height="26" rx="4" fill="#fff" stroke="#2d7d6e"/>
+      <text x="450" y="65">wiki/concepts/</text>
+      <rect x="560" y="48" width="120" height="26" rx="4" fill="#fff" stroke="#2d7d6e"/>
+      <text x="570" y="65">wiki/sources/</text>
+    </g>
+  </g>
+  <!-- layer 2: activity -->
+  <g>
+    <rect x="60" y="105" width="640" height="70" rx="8" fill="#d88a3a" opacity="0.1" stroke="#d88a3a" stroke-width="1.5"/>
+    <text x="80" y="129" font-family="Playfair Display, serif" font-weight="700" font-size="17" fill="#2a2418">Layer 2 · Activity log (auto)</text>
+    <text x="80" y="147" font-family="Inter, sans" font-size="11.5" fill="#5a5140">Auto-filled every 2h. Answers "what did I do?"</text>
+    <g font-family="JetBrains Mono, monospace" font-size="10" fill="#2a2418">
+      <rect x="320" y="133" width="110" height="26" rx="4" fill="#fff" stroke="#d88a3a"/>
+      <text x="330" y="150">activity/...</text>
+      <rect x="440" y="133" width="110" height="26" rx="4" fill="#fff" stroke="#d88a3a"/>
+      <text x="450" y="150">situation/...</text>
+      <rect x="560" y="133" width="120" height="26" rx="4" fill="#fff" stroke="#d88a3a"/>
+      <text x="570" y="150">Sessions/...</text>
+    </g>
+  </g>
+  <!-- layer 3: memory -->
+  <g>
+    <rect x="60" y="190" width="640" height="70" rx="8" fill="#9b7eb7" opacity="0.1" stroke="#9b7eb7" stroke-width="1.5"/>
+    <text x="80" y="214" font-family="Playfair Display, serif" font-weight="700" font-size="17" fill="#2a2418">Layer 3 · AI memory</text>
+    <text x="80" y="232" font-family="Inter, sans" font-size="11.5" fill="#5a5140">Auto-loaded by Claude. No re-explaining.</text>
+    <g font-family="JetBrains Mono, monospace" font-size="9.5" fill="#2a2418">
+      <rect x="320" y="218" width="360" height="26" rx="4" fill="#fff" stroke="#9b7eb7"/>
+      <text x="330" y="235">~/.claude/projects/&lt;machine&gt;/memory/MEMORY.md</text>
+    </g>
+  </g>
+  <!-- left labels -->
+  <g font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" fill="#8a7f68" letter-spacing="1.5">
+    <text x="22" y="56" transform="rotate(-90 22 56)">I write</text>
+    <text x="22" y="142" transform="rotate(-90 22 142)">Auto</text>
+    <text x="22" y="228" transform="rotate(-90 22 228)">AI reads</text>
+  </g>
+</svg>
+<figcaption>Three layers — Layer 1 you write, Layer 2 is automatic, Layer 3 the AI reads.</figcaption>
+</figure>
+</p>
+<p><strong>Layer 1 — Project knowledge (<code>wiki/entities/</code>, <code>wiki/concepts/</code>)</strong>: notes you write yourself. <em>Permanent</em> asset.</p>
+<p><strong>Layer 2 — Activity log (<code>wiki/activity/</code>, <code>wiki/situation/</code>, <code>wiki/sources/Sessions YYYY-MM-DD.md</code>)</strong>: auto-generated daily snapshots.</p>
+<p><strong>Layer 3 — AI memory (<code>~/.claude/projects/&lt;machine&gt;/memory/</code>)</strong>: small files Claude Code auto-loads at session start.</p>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **One-liner to remember**:*I write (Layer 1) → the computer refreshes every 2h (Layer 2) → AI auto-reads next session (Layer 3).*</div>
+
+<hr />
+<h2 id="2-automation-flow-what-happens-every-2-hours">2. Automation flow — "what happens every 2 hours"</h2>
+<p>
+<figure class="diagram">
+<svg viewBox="0 0 760 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tracker flow every 2 hours">
+  <!-- inputs -->
+  <g font-family="Inter, sans" font-size="11.5" fill="#2a2418">
+    <text x="20" y="22" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="2" fill="#8a7f68">INPUTS</text>
+    <rect x="20" y="35"  width="140" height="28" rx="6" fill="#fff" stroke="#2d7d6e" stroke-width="1.2"/><text x="34" y="53">📝 new/modified notes</text>
+    <rect x="20" y="71"  width="140" height="28" rx="6" fill="#fff" stroke="#2d7d6e" stroke-width="1.2"/><text x="34" y="89">⌨ Git commits</text>
+    <rect x="20" y="107" width="140" height="28" rx="6" fill="#fff" stroke="#2d7d6e" stroke-width="1.2"/><text x="34" y="125">⚡ GitHub PRs/issues</text>
+    <rect x="20" y="143" width="140" height="28" rx="6" fill="#fff" stroke="#2d7d6e" stroke-width="1.2"/><text x="34" y="161">📅 calendar</text>
+    <rect x="20" y="179" width="140" height="28" rx="6" fill="#fff" stroke="#2d7d6e" stroke-width="1.2"/><text x="34" y="197">📋 sticky notes</text>
+  </g>
+  <!-- arrows in -->
+  <g stroke="#5a5140" stroke-width="1" fill="none" marker-end="url(#arr2)" stroke-opacity="0.6">
+    <line x1="160" y1="49"  x2="288" y2="118"/>
+    <line x1="160" y1="85"  x2="288" y2="125"/>
+    <line x1="160" y1="121" x2="288" y2="130"/>
+    <line x1="160" y1="157" x2="288" y2="135"/>
+    <line x1="160" y1="193" x2="288" y2="142"/>
+  </g>
+
+  <!-- tracker box -->
+  <g>
+    <rect x="288" y="80" width="184" height="104" rx="10" fill="#2a2418"/>
+    <text x="380" y="108" font-family="Playfair Display, serif" font-weight="800" font-size="18" fill="#d88a3a" text-anchor="middle">tracker.ps1</text>
+    <text x="380" y="128" font-family="JetBrains Mono, monospace" font-size="11" fill="#f4f1e8" text-anchor="middle">every 2h</text>
+    <text x="380" y="146" font-family="JetBrains Mono, monospace" font-size="10" fill="#c2b89f" text-anchor="middle">00:00, 02:00, ..., 22:00</text>
+    <circle cx="380" cy="166" r="9" fill="#c4593f"/>
+    <text x="380" y="170" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">12×</text>
+  </g>
+
+  <!-- arrows out -->
+  <g stroke="#d88a3a" stroke-width="1" fill="none" marker-end="url(#arr3)" stroke-opacity="0.7">
+    <line x1="472" y1="100" x2="598" y2="50"/>
+    <line x1="472" y1="118" x2="598" y2="86"/>
+    <line x1="472" y1="132" x2="598" y2="121"/>
+    <line x1="472" y1="146" x2="598" y2="157"/>
+    <line x1="472" y1="160" x2="598" y2="193"/>
+  </g>
+  <!-- outputs -->
+  <g font-family="Inter, sans" font-size="11.5" fill="#2a2418">
+    <text x="600" y="22" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="2" fill="#8a7f68">OUTPUTS</text>
+    <rect x="600" y="35"  width="150" height="28" rx="6" fill="#fff" stroke="#d88a3a" stroke-width="1.2"/><text x="614" y="53">Today.md refresh</text>
+    <rect x="600" y="71"  width="150" height="28" rx="6" fill="#fff" stroke="#d88a3a" stroke-width="1.2"/><text x="614" y="89">_ontology.json</text>
+    <rect x="600" y="107" width="150" height="28" rx="6" fill="#fff" stroke="#d88a3a" stroke-width="1.2"/><text x="614" y="125">activity/&lt;date&gt;</text>
+    <rect x="600" y="143" width="150" height="28" rx="6" fill="#fff" stroke="#d88a3a" stroke-width="1.2"/><text x="614" y="161">situation/&lt;date&gt;</text>
+    <rect x="600" y="179" width="150" height="28" rx="6" fill="#fff" stroke="#d88a3a" stroke-width="1.2"/><text x="614" y="197">graph.html</text>
+  </g>
+
+  <!-- bottom note -->
+  <g font-family="JetBrains Mono, monospace" font-size="11" fill="#5a5140">
+    <text x="380" y="232" text-anchor="middle">LLM only when judging changes · ~$0.02-0.05/day</text>
+    <text x="380" y="250" text-anchor="middle" fill="#8a7f68">Everything else: plain PowerShell + Python</text>
+  </g>
+
+  <defs>
+    <marker id="arr2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#5a5140"/></marker>
+    <marker id="arr3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#d88a3a"/></marker>
+  </defs>
+</svg>
+<figcaption>Every 2 hours 흐름 — 입력 5개를 트래커 한 곳이 받아 산출물 5개로 변환.</figcaption>
+</figure>
+</p>
+<p>A <strong>Windows scheduled task</strong> (or macOS launchd, Linux cron) runs every 2 hours. The script:</p>
+<ol>
+<li>Scans newly added / modified files</li>
+<li>Collects side-channel signals: git, GitHub, calendar</li>
+<li>Sends note changes to an LLM that judges <em>"what changed"</em></li>
+<li><strong>Rebuilds the ontology graph</strong></li>
+<li>Aggregates results into <code>Today.md</code></li>
+</ol>
+<p>Cost: ~$0.001-0.005 per run. 12 runs/day = <strong>$0.02-0.05/day</strong> = $1-2/month.</p>
+<hr />
+<h2 id="3-prerequisites">3. Prerequisites</h2>
+<p>
+<figure class="diagram diagram-checklist">
+<svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg">
+  <g font-family="Inter, sans" font-size="12" fill="#0a1f3d">
+    <text x="20" y="22" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="2" opacity="0.55">PHASE 1 · DAYS 1-3</text>
+    <rect x="20" y="35"  width="320" height="32" fill="#fff" stroke="#0a1f3d"/>
+    <text x="34" y="56">☐ Obsidian (vault UI)</text>
+    <text x="240" y="56" font-family="IBM Plex Mono, monospace" font-size="10" opacity="0.55">free</text>
+    <rect x="20" y="73"  width="320" height="32" fill="#fff" stroke="#0a1f3d"/>
+    <text x="34" y="94">☐ Claude Code (AI agent)</text>
+    <text x="240" y="94" font-family="IBM Plex Mono, monospace" font-size="10" opacity="0.55">subscription</text>
+    <rect x="20" y="111" width="320" height="32" fill="#fff" stroke="#0a1f3d"/>
+    <text x="34" y="132">☐ Python 3.11+</text>
+    <text x="240" y="132" font-family="IBM Plex Mono, monospace" font-size="10" opacity="0.55">free</text>
+    <rect x="20" y="149" width="320" height="32" fill="#fff" stroke="#0a1f3d"/>
+    <text x="34" y="170">☐ Basic terminal skills</text>
+
+    <text x="380" y="22" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="2" opacity="0.55">PHASE 2 · DAYS 4-7</text>
+    <rect x="380" y="35" width="320" height="32" fill="#fff" stroke="#b5392a"/>
+    <text x="394" y="56">☐ OpenRouter API key</text>
+    <text x="600" y="56" font-family="IBM Plex Mono, monospace" font-size="10" opacity="0.55">$5 top-up</text>
+    <rect x="380" y="73" width="320" height="32" fill="#fff" stroke="#b5392a"/>
+    <text x="394" y="94">☐ gh CLI (optional)</text>
+    <text x="600" y="94" font-family="IBM Plex Mono, monospace" font-size="10" opacity="0.55">free</text>
+    <rect x="380" y="111" width="320" height="32" fill="#fff" stroke="#b5392a"/>
+    <text x="394" y="132">☐ pdfplumber, python-docx (pip)</text>
+    <text x="600" y="132" font-family="IBM Plex Mono, monospace" font-size="10" opacity="0.55">free</text>
+    <rect x="380" y="149" width="320" height="32" fill="#fff" stroke="#b5392a"/>
+    <text x="394" y="170">☐ Windows scheduled task perms</text>
+  </g>
+</svg>
+<figcaption>Days 1-3 free tools only. Day 4+: LLM key ($1-2/month).</figcaption>
+</figure>
+</p>
+<p><strong>Required from Day 1</strong>:</p>
+<ul>
+<li>[ ] <strong>Obsidian</strong> (<a href="https://obsidian.md">obsidian.md</a>, free)</li>
+<li>[ ] <strong>Claude Code</strong> (<a href="https://claude.com/claude-code">claude.com/claude-code</a>)</li>
+<li>[ ] <strong>Python 3.11+</strong></li>
+<li>[ ] Basic terminal skills</li>
+</ul>
+<p><strong>Required from Day 4 onward</strong>:
+- [ ] <strong>OpenRouter API key</strong> (<a href="https://openrouter.ai">openrouter.ai</a>, $5 lasts months)
+- [ ] <strong><code>gh</code> CLI</strong> (<a href="https://cli.github.com">cli.github.com</a>) — optional</p>
+<div class="callout callout-warn"><span class="cb">⚠ WATCH OUT</span> **This guide is Windows-first**. macOS / Linux work with minor path tweaks.</div>
+
+<hr />
+<h2 id="35-cli-installation-claude-code-amp-codex">3.5. CLI Installation — Claude Code &amp; Codex</h2>
+<h3 id="claude-code-anthropic-primary-agent">Claude Code (Anthropic) — primary agent</h3>
+<p><strong>Prerequisites</strong>: Anthropic subscription · Node.js 18+</p>
+<p><strong>Windows</strong>: download the .exe from <a href="https://claude.com/claude-code">https://claude.com/claude-code</a> → install → <code>claude --version</code> → <code>claude</code> (browser auth opens)</p>
+<p>Or via npm:</p>
+<pre><code class="language-powershell">npm install -g @anthropic-ai/claude-code
+</code></pre>
+<p><strong>macOS</strong>:</p>
+<pre><code class="language-bash">brew install --cask claude-code
+# or
+npm install -g @anthropic-ai/claude-code
+</code></pre>
+<p><strong>Linux</strong>: <code>npm install -g @anthropic-ai/claude-code</code></p>
+<p><strong>First-run auth</strong>: <code>claude</code> → browser auto-opens for Anthropic login → token saved to <code>~/.claude/auth.json</code>.</p>
+<pre><code class="language-powershell">claude /help          # available slash commands
+claude /status        # current model / auth / context
+</code></pre>
+<h3 id="codex-openai-secondary-agent-optional">Codex (OpenAI) — secondary agent (optional)</h3>
+<p><strong>Prerequisites</strong>: ChatGPT subscription · Node.js 18+</p>
+<p><strong>Windows</strong>: <a href="https://chatgpt.com/codex">https://chatgpt.com/codex</a> installer or <code>npm install -g @openai/codex</code>
+<strong>macOS</strong>: <code>brew install codex</code> or npm
+<strong>Linux</strong>: <code>npm install -g @openai/codex</code></p>
+<p><strong>First-run auth</strong>: <code>codex</code> → browser → OpenAI login → token saved to <code>~/.codex/auth.json</code>.</p>
+<h3 id="both-clis-together">Both CLIs together</h3>
+<pre><code class="language-powershell">cd C:\Users\&lt;you&gt;\ObsidianVault
+claude     # primary
+codex      # secondary (optional)
+</code></pre>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **Both agents see the same vault.** Claude Code reads `CLAUDE.md`, Codex reads `AGENTS.md`. Put both files in your vault for symmetric context.</div>
+
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Prompt for Claude Code users — adding Codex</div>
+<pre>My OS is Windows / macOS / Linux. Help me install Codex CLI through to first-run auth.
+
+1. Verify Node.js 18+
+2. npm install -g @openai/codex (or OS-recommended)
+3. codex --version
+4. codex → browser login
+
+Then create ~/.codex/AGENTS.md with one line:
+"My vault is at C:\Users\<me>\ObsidianVault\. Always read wiki/Today.md before starting any work."</pre>
+</div>
+
+<h3 id="troubleshooting">Troubleshooting</h3>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>claude: command not found</code></td>
+<td>npm global bin not in PATH</td>
+<td>Add <code>npm config get prefix</code> + <code>/bin</code> to PATH</td>
+</tr>
+<tr>
+<td>Browser doesn't open during auth</td>
+<td>WSL / SSH</td>
+<td><code>claude --no-auto-open</code>, paste URL manually</td>
+</tr>
+<tr>
+<td><code>EACCES</code> permission denied</td>
+<td>npm global install perm</td>
+<td>sudo or change npm prefix</td>
+</tr>
+<tr>
+<td><code>npm install -g</code> fails on Windows</td>
+<td>No Node</td>
+<td><code>winget install OpenJS.NodeJS</code></td>
+</tr>
+<tr>
+<td>Console encoding issues</td>
+<td>code page</td>
+<td><code>chcp 65001</code> for UTF-8</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-warn"><span class="cb">⚠ WATCH OUT</span> **Subscription vs API key**:CLI auth uses **subscription** (browser). **OpenRouter API key is separate** (Day 6 — for the automated LLM judgment, NOT CLI auth).</div>
+
+<hr />
+<h2 id="day-1-create-your-vault">Day 1 — Create your vault</h2>
+<p><strong>Today's goal</strong>: create an empty Obsidian vault and hand-write an entity page for your most active project. No automation yet.</p>
+<h3 id="step-11-create-the-vault">Step 1.1 — Create the vault</h3>
+<p>Launch Obsidian → "Create new vault" → name <code>ResearchVault</code>, location <code>C:\Users\&lt;you&gt;\ObsidianVault\</code>.</p>
+<h3 id="step-12-folder-structure">Step 1.2 — Folder structure</h3>
+<pre><code>ObsidianVault/
+└── wiki/
+    ├── entities/        ← one page per project / person / grant
+    ├── concepts/        ← one page per method / theory
+    ├── sources/         ← raw documents / digests / session logs
+    └── (activity/, situation/ are auto-created later)
+</code></pre>
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Or drop into Claude Code/Codex CLI</div>
+<pre>Create a wiki/ folder inside `C:\Users\<me>\ObsidianVault\` with three subfolders: entities/, concepts/, sources/. Put a one-line README.md in each explaining what it holds.</pre>
+</div>
+
+<h3 id="step-13-your-first-entity-page">Step 1.3 — Your first entity page</h3>
+<p>Pick your most active project. Example uses fictional <em>Project A</em>:</p>
+<pre><code class="language-markdown">---
+type: project
+title: &quot;Project A&quot;
+status: active
+tier: 2
+deadline: 2026-08-15
+related:
+  - &quot;&lt;span class=&quot;wikilink&quot;&gt;&amp;lt;my name&amp;gt;&lt;/span&gt;&quot;
+  - &quot;&lt;span class=&quot;wikilink&quot;&gt;Method A&lt;/span&gt;&quot;
+---
+
+# Project A
+
+(One-sentence project description.)
+
+- **PI**: &lt;span class=&quot;wikilink&quot;&gt;&amp;lt;my name&amp;gt;&lt;/span&gt;
+- **Methods**: &lt;span class=&quot;wikilink&quot;&gt;Method A&lt;/span&gt;, &lt;span class=&quot;wikilink&quot;&gt;Method B&lt;/span&gt;
+- **Status**: pilot N participants in progress, external grant X under review.
+
+## Open issues
+- Core component accuracy at X% — needs more validation.
+</code></pre>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **Frontmatter anatomy**:the area between top `---` lines. Computer-read *labels*, separate from freeform body.
+> - `type: project` — required for ontology recognition
+> - `status: active` / `tier: 2` — auto-collected by Today.md
+> - `deadline: YYYY-MM-DD` — auto-computed D-counter
+> - `related: [...]` — wikilink list, becomes `relatedTo` relation</div>
+
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **How wikilinks behave**:`<span class="wikilink">Method A</span>` auto-renders as link, tracks as stub if target missing, shows as graph edge.</div>
+
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Drop into Claude Code/Codex CLI</div>
+<pre>My most active project is [PROJECT NAME]. Build wiki/entities/[PROJECT NAME].md following the Day 1 step 1.3 template:
+- frontmatter: type: project, status: active, tier: 2, deadline: [YYYY-MM-DD]
+- related: my name + 1-2 frequently used methods (as wikilinks)
+
+Body: one-sentence description, PI / Methods / Status bullets, ## Open issues section.</pre>
+</div>
+
+<h3 id="step-14-repeat-for-one-or-two-more">Step 1.4 — Repeat for one or two more</h3>
+<p>Add an advisee, a frequently-used method, an in-progress grant. <em>At least 3-4 entities</em> for the next-day automation to have a meaningful graph.</p>
+<div class="callout callout-check"><span class="cb">✓ CHECK</span> **Day 1 check**:Obsidian's graph view (Ctrl+G) shows your nodes as a small constellation.</div>
+
+<hr />
+<h2 id="day-2-todaymd-single-entry-point">Day 2 — Today.md (single entry point)</h2>
+<p><strong>Today's goal</strong>: build the <em>one page</em> you read every day.</p>
+<h3 id="step-21-create-codewikitodaymdcode">Step 2.1 — Create <code>wiki/Today.md</code></h3>
+<pre><code class="language-markdown">---
+type: meta
+title: &quot;Today — Single Entry Point&quot;
+---
+
+# Today — Single Entry Point
+
+&gt; **Always start here.** Read first every session.
+
+## 1. Where to ask what
+
+| If you need… | Look here |
+|---|---|
+| **&quot;My project X — design / theory / methods&quot;** | `wiki/entities/&lt;X&gt;.md` |
+| **&quot;Who advises whom; grants where I'm PI&quot;** | &lt;span class=&quot;wikilink&quot;&gt;&amp;lt;my name&amp;gt;&lt;/span&gt; |
+| **&quot;Methodology&quot;** | `wiki/concepts/` |
+| **&quot;What do I need to do today?&quot;** | This page § 2-3 |
+
+## 2. Active deadlines
+
+| Deadline | Item | D- |
+|---|---|---|
+| YYYY-MM-DD | &lt;span class=&quot;wikilink&quot;&gt;Grant Name&lt;/span&gt; submission | D-XX |
+
+## 3. Active project priorities
+
+### Tier 1 — Submit-imminent
+- &lt;span class=&quot;wikilink&quot;&gt;Project A&lt;/span&gt; — one-line status
+
+### Tier 2 — Active development
+- &lt;span class=&quot;wikilink&quot;&gt;Project B&lt;/span&gt; — one-line status
+
+### Tier 3 — Backlog
+- &lt;span class=&quot;wikilink&quot;&gt;Project C&lt;/span&gt;
+
+## 4. Recent activity (auto-updated)
+&lt;!-- BEGIN AUTO RECENT --&gt;
+(filled automatically on Day 4)
+&lt;!-- END AUTO RECENT --&gt;
+
+## 5. Quick commands
+(added Day 4-7)
+</code></pre>
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Drop into Claude Code/Codex CLI</div>
+<pre>Build wiki/Today.md from the Day 2 template. Fill § 2 and § 3:
+- Deadline: [grant name] [YYYY-MM-DD]
+- Tier 1: [project nearing deadline]
+- Tier 2: [1-3 active-development projects]
+- Tier 3: [backlog projects]
+
+Leave BEGIN/END AUTO RECENT markers in § 4 alone — Day 4 fills those. Then walk me through Pinning Today.md in Obsidian.</pre>
+</div>
+
+<h3 id="step-22-pin-in-obsidian">Step 2.2 — Pin in Obsidian</h3>
+<p>Right-click <code>Today.md</code> → "Pin".</p>
+<div class="callout callout-check"><span class="cb">✓ CHECK</span> **Day 2 check**:every morning, the first page you see is `Today.md`.</div>
+
+<hr />
+<h2 id="day-3-connect-claude-code-auto-session-log">Day 3 — Connect Claude Code + auto session log</h2>
+<h3 id="step-31-user-level-claudemd">Step 3.1 — User-level CLAUDE.md</h3>
+<p>Create <code>C:\Users\&lt;you&gt;\CLAUDE.md</code>:</p>
+<pre><code class="language-markdown"># User-level Claude Code instructions
+
+## On every session start
+1. Read `C:\Users\&lt;you&gt;\ObsidianVault\wiki\Today.md` first.
+2. Auto-memory at `~\.claude\projects\&lt;machine&gt;\memory\MEMORY.md` is auto-injected.
+3. Prefer existing vault content over reasoning from scratch.
+
+## Knowledge locations
+| Question type | Where |
+|---|---|
+| Project design / methods / status | `wiki/entities/&lt;project&gt;.md` |
+| Methodology / theory | `wiki/concepts/` |
+| Recent activity | `wiki/activity/&lt;date&gt;.md` |
+
+## User style
+- Reply in English (or Korean — user is bilingual).
+- Short and direct.
+</code></pre>
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Drop into Claude Code/Codex CLI</div>
+<pre>Create `C:\Users\<me>\CLAUDE.md` from the Day 3 step 3.1 template:
+- "On every session start" section
+- "Knowledge locations" table
+- "User style" (concise, direct)
+
+My vault path: C:\Users\<me>\ObsidianVault\</pre>
+</div>
+
+<h3 id="step-32-register-the-session-recording-hook">Step 3.2 — Register the session-recording hook</h3>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **What's a hook?** Claude Code auto-runs commands when specific events fire. The **`Stop`** hook fires the moment a session ends.</div>
+
+<p><code>~\.claude\settings.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;hooks&quot;: {
+    &quot;Stop&quot;: [
+      {
+        &quot;matcher&quot;: &quot;*&quot;,
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;powershell.exe -NoProfile -ExecutionPolicy Bypass -File \&quot;C:\\Users\\&lt;you&gt;\\ObsidianVault\\scripts\\save_session.ps1\&quot; -Source claude&quot;
+          }
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+<h3 id="step-33-minimal-save-sessionps1">Step 3.3 — Minimal save_session.ps1</h3>
+<pre><code class="language-powershell">$VaultRoot = 'C:\Users\&lt;you&gt;\ObsidianVault'
+$LogFile   = Join-Path $VaultRoot 'wiki\log.md'
+
+$stdin = [Console]::In.ReadToEnd()
+$session = if ($stdin) { $stdin | ConvertFrom-Json } else { @{} }
+$sid = if ($session.session_id) { $session.session_id.Substring(0, 8) } else { '--------' }
+
+$stamp = (Get-Date).ToString('yyyy-MM-dd HH:mm')
+$line  = &quot;- $stamp [claude $sid] session ended&quot;
+
+if (-not (Test-Path $LogFile)) { New-Item $LogFile -ItemType File -Force | Out-Null }
+Add-Content -Path $LogFile -Value $line -Encoding UTF8
+</code></pre>
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Drop into Claude Code/Codex CLI — full Day 3 hook setup</div>
+<pre>Set up Day 3 steps 3.2-3.3:
+
+1. Add a Stop hook in `~\.claude\settings.json` (create if missing). Command:
+   powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\Users\<me>\ObsidianVault\scripts\save_session.ps1 -Source claude
+
+2. Create `C:\Users\<me>\ObsidianVault\scripts\save_session.ps1`. Behavior:
+   - Read JSON on stdin from the Stop hook
+   - Append "- YYYY-MM-DD HH:mm [claude SID8] session ended" to wiki\log.md
+
+Watch out for Windows backslash escaping in JSON.</pre>
+</div>
+
+<h3 id="step-34-verify">Step 3.4 — Verify</h3>
+<p>Open a Claude session, ask about your project, end the session. <code>wiki/log.md</code> should have a new line.</p>
+<div class="callout callout-check"><span class="cb">✓ CHECK</span> **Day 3 check**:Claude already knows your project + log line written.</div>
+
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **🛠 Customizing — other hooks**:Claude Code has `SessionStart`, `PostToolUse`, `UserPromptSubmit`, etc. Document changes in `wiki/sources/My Hook Setup.md`.</div>
+
+<hr />
+<h2 id="day-4-the-every-2-hour-automated-tracker">Day 4 — The every-2-hour automated tracker</h2>
+<h3 id="step-41-codedaily-trackerps1code">Step 4.1 — <code>daily_tracker.ps1</code></h3>
+<pre><code class="language-powershell">$VaultRoot = 'C:\Users\&lt;you&gt;\ObsidianVault'
+$ActivityDir = Join-Path $VaultRoot 'wiki\activity'
+$today = (Get-Date).ToString('yyyy-MM-dd')
+$note  = Join-Path $ActivityDir &quot;$today.md&quot;
+
+if (-not (Test-Path $ActivityDir)) { New-Item -ItemType Directory $ActivityDir -Force | Out-Null }
+
+$lines = @(&quot;# Activity $today&quot;, &quot;&quot;)
+$cutoff = (Get-Date).AddHours(-24)
+$recent = Get-ChildItem -Path &quot;$VaultRoot\wiki&quot; -Recurse -File -Include *.md |
+    Where-Object { $_.LastWriteTime -gt $cutoff } |
+    Sort-Object LastWriteTime -Descending | Select-Object -First 30
+
+$lines += &quot;## File activity (last 24h)&quot;
+foreach ($f in $recent) {
+    $rel = $f.FullName.Replace($VaultRoot, '').Replace('\','/')
+    $lines += &quot;- $($f.LastWriteTime.ToString('HH:mm')) ``$rel``&quot;
+}
+
+Set-Content -Path $note -Value ($lines -join &quot;`r`n&quot;) -Encoding UTF8
+Write-Output &quot;Wrote $note&quot;
+</code></pre>
+<h3 id="step-42-register-the-windows-scheduled-task">Step 4.2 — Register the Windows scheduled task</h3>
+<p><strong>Method A — natural language to Claude Code/Codex CLI (recommended)</strong>:</p>
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Drop into Claude Code/Codex CLI</div>
+<pre>Register a Windows scheduled task "ResearchAssistantTracker" with:
+- Daily start at 00:00 → repeat every 120 minutes → 23:59 duration (12 fires/day)
+- Command: powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\Users\<me>\ObsidianVault\scripts\daily_tracker.ps1
+- Extras: StartWhenAvailable=true, DisallowStartIfOnBatteries=false, StopIfGoingOnBatteries=false
+
+Use schtasks.exe + Get-ScheduledTask + Set-ScheduledTask. After registering, show next-fire time.</pre>
+</div>
+
+<p><strong>Method B — direct (raw)</strong>:</p>
+<pre><code class="language-powershell">schtasks.exe /Create /TN &quot;ResearchAssistantTracker&quot; `
+  /SC DAILY /ST 00:00 /RI 120 /DU 23:59 `
+  /TR &quot;powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\Users\&lt;you&gt;\ObsidianVault\scripts\daily_tracker.ps1&quot; /F
+</code></pre>
+<p>12 fires/day (00, 02, 04, ..., 22).</p>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **🛠 Customizing — match your rhythm**:change two numbers.
+> - `/RI 120` = repeat interval (minutes). `60` hourly, `240` every 4h, etc.
+> - `/ST 00:00` = start time.
+> - Work-hours-only: `/SC DAILY /ST 09:00 /RI 60 /DU 10:00`.
+> - Document in `wiki/sources/My Tracker Setup.md` so future-you knows why.</div>
+
+<h3 id="step-43-catch-up-after-computer-was-off">Step 4.3 — Catch-up after computer was off</h3>
+<pre><code class="language-powershell">$task = Get-ScheduledTask -TaskName ResearchAssistantTracker
+$task.Settings.StartWhenAvailable = $true
+$task.Settings.DisallowStartIfOnBatteries = $false
+Set-ScheduledTask -TaskName ResearchAssistantTracker -Settings $task.Settings
+</code></pre>
+<h3 id="step-44-run-once-now">Step 4.4 — Run once now</h3>
+<pre><code class="language-powershell">powershell.exe -File C:\Users\&lt;you&gt;\ObsidianVault\scripts\daily_tracker.ps1
+</code></pre>
+<div class="callout callout-check"><span class="cb">✓ CHECK</span> **Day 4 check**:at the next even hour, a new `wiki/activity/YYYY-MM-DD.md` should appear.</div>
+
+<hr />
+<h2 id="day-5-ontology">Day 5 — Ontology</h2>
+<h3 id="50-whats-an-ontology-and-why-bother">5.0 — What's an ontology and why bother?</h3>
+<p>Just remember <strong>two tables</strong>:</p>
+<p><strong>(1) Types</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>What</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Person</code></td>
+<td>A single person</td>
+<td>yourself, advisees</td>
+</tr>
+<tr>
+<td><code>Project</code></td>
+<td>An active project</td>
+<td>research system</td>
+</tr>
+<tr>
+<td><code>Grant</code></td>
+<td>External funding</td>
+<td>NSF entity</td>
+</tr>
+<tr>
+<td><code>Concept</code></td>
+<td>Methodology / theory</td>
+<td>"BKT", "ECD"</td>
+</tr>
+<tr>
+<td><code>Course</code></td>
+<td>Taught course</td>
+<td>semester courses</td>
+</tr>
+<tr>
+<td><code>Manuscript</code></td>
+<td>A paper</td>
+<td>journal-submitted papers</td>
+</tr>
+<tr>
+<td><code>Lab</code> / <code>Institution</code> / <code>Funder</code></td>
+<td>Organizations</td>
+<td>your lab, university</td>
+</tr>
+<tr>
+<td><code>Tool</code></td>
+<td>Platforms</td>
+<td>Supabase, OpenRouter</td>
+</tr>
+</tbody>
+</table>
+<p><strong>(2) Relations</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Relation</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hasPI</code></td>
+<td>"X has PI Y"</td>
+<td>Project A → hasPI → me</td>
+</tr>
+<tr>
+<td><code>advises</code></td>
+<td>"X advises Y"</td>
+<td>me → advises → student 1</td>
+</tr>
+<tr>
+<td><code>usesMethod</code></td>
+<td>"X uses method Y"</td>
+<td>Project A → usesMethod → Method A</td>
+</tr>
+<tr>
+<td><code>fundedBy</code></td>
+<td>"X funded by Y"</td>
+<td>Project A → fundedBy → Grant X</td>
+</tr>
+<tr>
+<td><code>collaboratesWith</code></td>
+<td>"X with Y"</td>
+<td>me → collaboratesWith → collab</td>
+</tr>
+<tr>
+<td><code>taughtIn</code></td>
+<td>"X covered in Y"</td>
+<td>Method A → taughtIn → Course</td>
+</tr>
+<tr>
+<td><code>relatedTo</code></td>
+<td>(catch-all)</td>
+<td>default</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **Ontology = types + relations.** That's it.</div>
+
+<p>
+<figure class="diagram">
+<svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schema: types + relations">
+  <!-- title -->
+  <text x="20" y="22" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="2" fill="#8a7f68">SCHEMA · types and relations</text>
+
+  <!-- TYPE BOXES (top row) -->
+  <g font-family="Pretendard Variable, Inter, sans-serif" font-size="13" fill="#2a2418">
+    <g>
+      <rect x="20" y="40" width="100" height="56" rx="8" fill="#fff" stroke="#d88a3a" stroke-width="2"/>
+      <text x="70" y="62" text-anchor="middle" font-weight="700">Person</text>
+      <text x="70" y="80" text-anchor="middle" font-size="10" fill="#8a7f68">people</text>
+    </g>
+    <g>
+      <rect x="135" y="40" width="100" height="56" rx="8" fill="#fff" stroke="#2d7d6e" stroke-width="2"/>
+      <text x="185" y="62" text-anchor="middle" font-weight="700">Project</text>
+      <text x="185" y="80" text-anchor="middle" font-size="10" fill="#8a7f68">active projects</text>
+    </g>
+    <g>
+      <rect x="250" y="40" width="100" height="56" rx="8" fill="#fff" stroke="#4a7c59" stroke-width="2"/>
+      <text x="300" y="62" text-anchor="middle" font-weight="700">Grant</text>
+      <text x="300" y="80" text-anchor="middle" font-size="10" fill="#8a7f68">external funding</text>
+    </g>
+    <g>
+      <rect x="365" y="40" width="100" height="56" rx="8" fill="#fff" stroke="#9b7eb7" stroke-width="2"/>
+      <text x="415" y="62" text-anchor="middle" font-weight="700">Concept</text>
+      <text x="415" y="80" text-anchor="middle" font-size="10" fill="#8a7f68">methods · theory</text>
+    </g>
+    <g>
+      <rect x="480" y="40" width="100" height="56" rx="8" fill="#fff" stroke="#c4593f" stroke-width="2"/>
+      <text x="530" y="62" text-anchor="middle" font-weight="700">Course</text>
+      <text x="530" y="80" text-anchor="middle" font-size="10" fill="#8a7f68">courses</text>
+    </g>
+    <g>
+      <rect x="595" y="40" width="100" height="56" rx="8" fill="#fff" stroke="#8a7f68" stroke-width="2"/>
+      <text x="645" y="62" text-anchor="middle" font-weight="700">Manuscript</text>
+      <text x="645" y="80" text-anchor="middle" font-size="10" fill="#8a7f68">papers</text>
+    </g>
+  </g>
+
+  <!-- RELATION ARROWS (middle, dashed with labels) -->
+  <g font-family="JetBrains Mono, monospace" font-size="11" fill="#5a5140">
+    <text x="380" y="120" text-anchor="middle" font-weight="700" letter-spacing="1.5" fill="#8a7f68">↓ relations ↓</text>
+  </g>
+
+  <!-- Relations as rounded labels in a single row -->
+  <g font-family="JetBrains Mono, monospace" font-size="11">
+    <g>
+      <rect x="20" y="140" width="115" height="32" rx="16" fill="#fff8ed" stroke="#d88a3a"/>
+      <text x="77" y="160" text-anchor="middle" fill="#d88a3a" font-weight="700">hasPI</text>
+    </g>
+    <g>
+      <rect x="148" y="140" width="115" height="32" rx="16" fill="#fff8ed" stroke="#d88a3a"/>
+      <text x="205" y="160" text-anchor="middle" fill="#d88a3a" font-weight="700">advises</text>
+    </g>
+    <g>
+      <rect x="276" y="140" width="115" height="32" rx="16" fill="color-mix(in srgb, #2d7d6e 8%, #fff)" stroke="#2d7d6e"/>
+      <text x="333" y="160" text-anchor="middle" fill="#2d7d6e" font-weight="700">usesMethod</text>
+    </g>
+    <g>
+      <rect x="404" y="140" width="115" height="32" rx="16" fill="color-mix(in srgb, #4a7c59 8%, #fff)" stroke="#4a7c59"/>
+      <text x="461" y="160" text-anchor="middle" fill="#4a7c59" font-weight="700">fundedBy</text>
+    </g>
+    <g>
+      <rect x="532" y="140" width="115" height="32" rx="16" fill="color-mix(in srgb, #9b7eb7 8%, #fff)" stroke="#9b7eb7"/>
+      <text x="589" y="160" text-anchor="middle" fill="#9b7eb7" font-weight="700">taughtIn</text>
+    </g>
+    <g>
+      <rect x="20" y="180" width="115" height="32" rx="16" fill="#fdf2ee" stroke="#c4593f"/>
+      <text x="77" y="200" text-anchor="middle" fill="#c4593f" font-weight="700">cites</text>
+    </g>
+    <g>
+      <rect x="148" y="180" width="115" height="32" rx="16" fill="#fdf2ee" stroke="#c4593f"/>
+      <text x="205" y="200" text-anchor="middle" fill="#c4593f" font-weight="700">extends</text>
+    </g>
+    <g>
+      <rect x="276" y="180" width="115" height="32" rx="16" fill="#fff" stroke="#5a5140"/>
+      <text x="333" y="200" text-anchor="middle" fill="#5a5140" font-weight="700">collaboratesWith</text>
+    </g>
+    <g>
+      <rect x="404" y="180" width="115" height="32" rx="16" fill="#fff" stroke="#5a5140"/>
+      <text x="461" y="200" text-anchor="middle" fill="#5a5140" font-weight="700">builtOn</text>
+    </g>
+    <g>
+      <rect x="532" y="180" width="115" height="32" rx="16" fill="#fff" stroke="#5a5140"/>
+      <text x="589" y="200" text-anchor="middle" fill="#5a5140" font-weight="700">relatedTo</text>
+    </g>
+  </g>
+
+  <!-- bottom: how to read -->
+  <g font-family="Pretendard Variable, Inter, sans-serif" font-size="12.5" fill="#2a2418">
+    <rect x="20" y="240" width="720" height="64" rx="8" fill="#f6f3ea" stroke="#5a5140" stroke-dasharray="3 3"/>
+    <text x="40" y="262" font-weight="700" font-size="13">How to read:</text>
+    <text x="40" y="282" fill="#5a5140">예) <tspan font-family="JetBrains Mono, monospace" fill="#2d7d6e" font-weight="700">[Project]</tspan> <tspan font-family="JetBrains Mono, monospace" fill="#d88a3a" font-weight="700">hasPI</tspan> <tspan font-family="JetBrains Mono, monospace" fill="#d88a3a" font-weight="700">[Person]</tspan>  =  "Project A's PI is Dr. Smith"</text>
+    <text x="40" y="298" fill="#5a5140">예) <tspan font-family="JetBrains Mono, monospace" fill="#2d7d6e" font-weight="700">[Project]</tspan> <tspan font-family="JetBrains Mono, monospace" fill="#2d7d6e" font-weight="700">usesMethod</tspan> <tspan font-family="JetBrains Mono, monospace" fill="#9b7eb7" font-weight="700">[Concept]</tspan>  =  "Project A uses Method A"</text>
+  </g>
+</svg>
+<figcaption>스키마 = 타입 6종 + 관계 10종. 본인이 entity 페이지를 쓰면 Auto으로 이 그래프가 만들어집니다.</figcaption>
+</figure>
+</p>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **🛠 Customizing — your domain**:HCI → `Study`/`Participant`. Clinical → `Trial`/`Cohort`. Edit `RELATION_RULES` in `build_ontology.py` + log in `wiki/sources/My Ontology Customization.md`.</div>
+
+<h3 id="501-how-auto-extraction-works">5.0.1 — How auto-extraction works</h3>
+<p><code>build_ontology.py</code> runs every 2 hours and:</p>
+<ol>
+<li>Reads every <code>wiki/**/*.md</code>, parses <code>type:</code> frontmatter</li>
+<li>Extracts every <code>&lt;span class="wikilink"&gt;wikilink&lt;/span&gt;</code> in body</li>
+<li>Cue-word matching ±100 chars (e.g., <em>"funded by"</em> → <code>fundedBy</code>)</li>
+<li>Type-domain enforcement (auto-orient direction)</li>
+<li>Outputs JSON-LD</li>
+</ol>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **JSON-LD?** "JSON for Linked Data" — W3C standard, RDF/SPARQL compatible.</div>
+
+<h3 id="step-51-55">Step 5.1-5.5</h3>
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Drop into Claude Code/Codex CLI — full Day 5 setup</div>
+<pre>Pull the full build_ontology.py from the guide (https://educatian.github.io/research-assistant-ai-workflow-en/) into my vault scripts/. Then:
+
+1. Run python build_ontology.py once → confirm wiki/_ontology.json + _ontology_summary.md + _ontology_graph.html appear
+2. Append `& python "$VaultRoot\scripts\build_ontology.py"` to daily_tracker.ps1
+3. Open _ontology_graph.html and visually confirm
+
+My vault: C:\Users\<me>\ObsidianVault\</pre>
+</div>
+
+<pre><code class="language-powershell">python C:\Users\&lt;you&gt;\ObsidianVault\scripts\build_ontology.py
+# → wiki/_ontology.json + _ontology_graph.html
+
+# Add to tracker
+# (append to daily_tracker.ps1)
+&amp; python &quot;$VaultRoot\scripts\build_ontology.py&quot;
+
+# Query
+python scripts\query_ontology.py &quot;Project A&quot;
+python scripts\query_ontology.py --type Grant
+python scripts\query_ontology.py --predicate hasPI
+</code></pre>
+<div class="callout callout-check"><span class="cb">✓ CHECK</span> **Day 5 check**:`python query_ontology.py "<your name>"` returns advisees, grants, collaborators.</div>
+
+<hr />
+<h2 id="day-6-llm-detects-changes-in-your-notes">Day 6 — LLM detects changes in your notes</h2>
+<h3 id="step-61-openrouter-api-key">Step 6.1 — OpenRouter API key</h3>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **OpenRouter** = LLM proxy (use any provider's models through one API). **API key** = secret string for auth.</div>
+
+<p>Sign up → top up $5 → save key:</p>
+<pre><code>C:\Users\&lt;you&gt;\Desktop\_secrets\openrouter.txt
+</code></pre>
+<div class="callout callout-warn"><span class="cb">⚠ WATCH OUT</span> **Never put `_secrets/` inside the vault.**### Step 6.2 — situation_watch.py</div>
+
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Drop into Claude Code/Codex CLI — full Day 6 setup</div>
+<pre>Help me set up Day 6 situation_watch:
+
+1. Save my OpenRouter API key in C:\Users\<me>\Desktop\_secrets\openrouter.txt (NEVER inside vault)
+2. Pull situation_watch.py + apply_situation.py into vault scripts/
+3. First run: python situation_watch.py --hours 168
+4. Verify wiki/situation/<today>.md has [AUTO]/[REVIEW] proposals
+5. Append to daily_tracker.ps1: `& python "$VaultRoot\scripts\situation_watch.py" --hours 24`
+
+My vault: C:\Users\<me>\ObsidianVault\</pre>
+</div>
+
+<pre><code class="language-powershell">python C:\Users\&lt;you&gt;\ObsidianVault\scripts\situation_watch.py --hours 168
+</code></pre>
+<p><code>wiki/situation/&lt;today&gt;.md</code> will contain:</p>
+<pre><code class="language-markdown">### [AUTO] Project A — deadline_update
+- new_value: 2026-09-01
+- confidence: 0.92
+- reason: new deadline mentioned in README
+- evidence: &quot;Final pilot deadline pushed to September 1, 2026&quot;
+</code></pre>
+<h3 id="step-65-apply">Step 6.5 — Apply</h3>
+<pre><code class="language-powershell">python C:\Users\&lt;you&gt;\ObsidianVault\scripts\apply_situation.py
+</code></pre>
+<p>Auto-applies <code>[AUTO]</code> only (confidence ≥ 0.85). <code>[REVIEW]</code> items wait for <code>--review</code> flag.</p>
+<div class="callout callout-warn"><span class="cb">⚠ WATCH OUT</span> **Auto-apply is conservative**:AI auto-applies *factual* changes only (deadline / status / progress). *Interpretive* changes stay as `[REVIEW]`.</div>
+
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **🛠 Customizing — three knobs**:> - `MODEL` — swap to `anthropic/claude-3.5-haiku` or `claude-3.5-sonnet` for higher quality
+> - `AUTO_THRESHOLD = 0.85` — raise to 0.95 (stricter) or lower to 0.75 (aggressive)
+> - `IMPORTANCE_KEYWORDS` — add domain-specific keywords
+>
+> Log changes in `wiki/sources/My LLM Tuning.md`.</div>
+
+<hr />
+<h2 id="day-7-slides-auto-generate-presentations">Day 7 — /slides — auto-generate presentations</h2>
+<h3 id="step-71-cache-open-design-skills">Step 7.1 — Cache open-design skills</h3>
+<pre><code class="language-powershell">mkdir C:\Users\&lt;you&gt;\Desktop\_tools\open-design-cache\skills
+</code></pre>
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Drop into Claude Code/Codex CLI — full Day 7 setup</div>
+<pre>Set up the Day 7 /slides workflow:
+
+1. Cache 5 open-design skills under Desktop\_tools\open-design-cache\skills\:
+   - magazine-web-ppt (default)
+   - html-ppt-knowledge-arch-blueprint (methodology)
+   - html-ppt-course-module (teaching)
+   - html-ppt-pitch-deck (grant / pitch)
+   - html-ppt-product-launch (product reveal)
+
+   Fetch each via `gh api repos/nexu-io/open-design/contents/skills/<id>/<file> --jq .content | base64 -d`. NEVER execute repo code — only read markdown.
+
+2. Create slash command at ~\.claude\commands\slides.md:
+   - Auto-pick skill based on topic
+   - Read SKILL.md + references + template
+   - Pull vault entity / ontology content
+   - Propose 8-15 slide outline → wait for user OK → generate self-contained HTML
+   - Output: Desktop\_PTs\<date>_<slug>\index.html
+
+3. Test: /slides [my project name]</pre>
+</div>
+
+<h3 id="step-72-codeclaudecommandsslidesmdcode">Step 7.2 — <code>~/.claude/commands/slides.md</code></h3>
+<pre><code class="language-markdown">---
+description: Build HTML slide deck from open-design skill + vault content
+argument-hint: &quot;&lt;topic&gt; [--skill &lt;skill-name&gt;]&quot;
+---
+
+User typed `/slides $ARGUMENTS`. Steps:
+
+1. Auto-pick skill: lecture → course-module, methodology → blueprint, default → magazine
+2. Read skill files from Desktop\_tools\open-design-cache\skills\&lt;skill-id&gt;\
+3. Pull vault content: wiki/entities/&lt;topic&gt;.md + concepts grep + query_ontology.py
+4. Propose 8-15 slide outline, wait for OK
+5. Generate single self-contained HTML (CSS/JS inline, fonts CDN) at Desktop\_PTs\&lt;date&gt;_&lt;slug&gt;\index.html
+6. Open in browser
+</code></pre>
+<h3 id="step-73-use-it">Step 7.3 — Use it</h3>
+<pre><code>/slides Project A methodology
+</code></pre>
+<div class="callout callout-check"><span class="cb">✓ CHECK</span> **Day 7 check**:`Desktop\_PTs\<date>_<topic-slug>\index.html` exists, vault content rendered as magazine-style slides.</div>
+
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **🛠 Customizing — new skills / commands**:`~\.claude\commands\<name>.md` for custom slash commands. Document in `wiki/sources/My Custom Skills.md`.</div>
+
+<hr />
+<h2 id="after-7-days-daily-rhythm">After 7 days — daily rhythm</h2>
+<p>
+<figure class="diagram">
+<svg viewBox="0 0 760 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- timeline -->
+  <line x1="40" y1="100" x2="720" y2="100" stroke="#0a1f3d" stroke-width="2"/>
+  <g font-family="Inter, sans" fill="#0a1f3d">
+    <!-- 5 milestones -->
+    <g>
+      <circle cx="80" cy="100" r="10" fill="#3b82f6"/>
+      <text x="80" y="105" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">Morn</text>
+      <text x="80" y="135" text-anchor="middle" font-size="11" font-weight="600">Open Today.md</text>
+      <text x="80" y="150" text-anchor="middle" font-size="10" opacity="0.7">Deadlines/priorities</text>
+      <text x="80" y="165" text-anchor="middle" font-size="10" opacity="0.7">/ overnight changes</text>
+    </g>
+    <g>
+      <circle cx="220" cy="100" r="10" fill="#f59e0b"/>
+      <text x="220" y="105" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">Work</text>
+      <text x="220" y="135" text-anchor="middle" font-size="11" font-weight="600">Claude Code session</text>
+      <text x="220" y="150" text-anchor="middle" font-size="10" opacity="0.7">CLAUDE.md Auto</text>
+      <text x="220" y="165" text-anchor="middle" font-size="10" opacity="0.7">loads → instant context</text>
+    </g>
+    <g>
+      <circle cx="380" cy="100" r="10" fill="#10b981"/>
+      <text x="380" y="105" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">2h</text>
+      <text x="380" y="135" text-anchor="middle" font-size="11" font-weight="600">트래커 Auto 갱신</text>
+      <text x="380" y="150" text-anchor="middle" font-size="10" opacity="0.7">Scans new notes</text>
+      <text x="380" y="165" text-anchor="middle" font-size="10" opacity="0.7">/ ontology rebuild</text>
+    </g>
+    <g>
+      <circle cx="540" cy="100" r="10" fill="#8b5cf6"/>
+      <text x="540" y="105" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">End</text>
+      <text x="540" y="135" text-anchor="middle" font-size="11" font-weight="600">Stop hook → digest</text>
+      <text x="540" y="150" text-anchor="middle" font-size="10" opacity="0.7">Sessions/&lt;date&gt;.md</text>
+      <text x="540" y="165" text-anchor="middle" font-size="10" opacity="0.7">에 Auto 추가</text>
+    </g>
+    <g>
+      <circle cx="680" cy="100" r="10" fill="#b5392a"/>
+      <text x="680" y="105" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">Wkend</text>
+      <text x="680" y="135" text-anchor="middle" font-size="11" font-weight="600">[REVIEW] check</text>
+      <text x="680" y="150" text-anchor="middle" font-size="10" opacity="0.7">apply_situation</text>
+      <text x="680" y="165" text-anchor="middle" font-size="10" opacity="0.7">--review</text>
+    </g>
+    <text x="380" y="30" text-anchor="middle" font-family="Playfair Display, serif" font-weight="700" font-size="18">Daily loop</text>
+    <text x="380" y="50" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" opacity="0.55" letter-spacing="2">DAILY LOOP</text>
+  </g>
+</svg>
+<figcaption>Morning - work - 2h - end - weekend — you only act twice (morning, weekend).</figcaption>
+</figure>
+</p>
+<p><strong>Morning</strong> — open Today.md. Deadlines + priorities + what changed last night, all at a glance.</p>
+<p><strong>During work</strong> — Claude Code anywhere. CLAUDE.md + memory auto-loaded.</p>
+<p><strong>Every 2 hours (background)</strong> — tracker auto-runs. Notes scanned, ontology rebuilt, changes detected, Today.md refreshed. You do nothing.</p>
+<p><strong>Session end</strong> — Stop hook auto-adds session digest.</p>
+<p><strong>Weekend</strong> — review <code>wiki/situation/&lt;recent dates&gt;.md</code> <code>[REVIEW]</code> items. Apply what's worth applying. Open the ontology graph.</p>
+<hr />
+<h2 id="real-scenarios-when-this-is-most-useful">Real scenarios — when this is most useful</h2>
+<p>
+<figure class="diagram">
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="5 use scenarios">
+  <text x="20" y="22" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="2" fill="#8a7f68">USE CASES · daily research life</text>
+
+  <!-- 5 scenario cards in 2 rows -->
+  <g font-family="Pretendard Variable, Inter, sans-serif">
+
+    <!-- Card 1: Dissertation chapter -->
+    <g>
+      <rect x="20" y="40" width="230" height="130" rx="10" fill="#fff" stroke="#2d7d6e" stroke-width="2"/>
+      <circle cx="50" cy="68" r="12" fill="#2d7d6e"/>
+      <text x="50" y="73" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">1</text>
+      <text x="74" y="72" font-size="14" font-weight="700" fill="#2a2418">Dissertation chapter</text>
+      <text x="36" y="98" font-size="11.5" fill="#5a5140">Recover advisor decision</text>
+      <text x="36" y="115" font-size="11.5" fill="#5a5140">from 6 months ago in 5 min</text>
+      <rect x="36" y="128" width="200" height="28" rx="4" fill="#f6f3ea"/>
+      <text x="46" y="146" font-family="JetBrains Mono, monospace" font-size="10" fill="#2d7d6e">grep Sessions*.md "Method A"</text>
+    </g>
+
+    <!-- Card 2: Grant deadline -->
+    <g>
+      <rect x="265" y="40" width="230" height="130" rx="10" fill="#fff" stroke="#d88a3a" stroke-width="2"/>
+      <circle cx="295" cy="68" r="12" fill="#d88a3a"/>
+      <text x="295" y="73" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">2</text>
+      <text x="319" y="72" font-size="14" font-weight="700" fill="#2a2418">Grant D-7 panic</text>
+      <text x="281" y="98" font-size="11.5" fill="#5a5140">9개 docx 일관성 Auto</text>
+      <text x="281" y="115" font-size="11.5" fill="#5a5140">+ deadline D-counter</text>
+      <rect x="281" y="128" width="200" height="28" rx="4" fill="#fff8ed"/>
+      <text x="291" y="146" font-family="JetBrains Mono, monospace" font-size="10" fill="#d88a3a">situation_watch [AUTO]</text>
+    </g>
+
+    <!-- Card 3: New advisee -->
+    <g>
+      <rect x="510" y="40" width="230" height="130" rx="10" fill="#fff" stroke="#9b7eb7" stroke-width="2"/>
+      <circle cx="540" cy="68" r="12" fill="#9b7eb7"/>
+      <text x="540" y="73" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">3</text>
+      <text x="564" y="72" font-size="14" font-weight="700" fill="#2a2418">New advisee onboarding</text>
+      <text x="526" y="98" font-size="11.5" fill="#5a5140">Portfolio at-a-glance</text>
+      <text x="526" y="115" font-size="11.5" fill="#5a5140">5분 안에 Auto 생성</text>
+      <rect x="526" y="128" width="200" height="28" rx="4" fill="color-mix(in srgb, #9b7eb7 8%, #fff)"/>
+      <text x="536" y="146" font-family="JetBrains Mono, monospace" font-size="10" fill="#9b7eb7">/slides 내 portfolio</text>
+    </g>
+
+    <!-- Card 4: Reviewer 2 -->
+    <g>
+      <rect x="20" y="190" width="230" height="130" rx="10" fill="#fff" stroke="#c4593f" stroke-width="2"/>
+      <circle cx="50" cy="218" r="12" fill="#c4593f"/>
+      <text x="50" y="223" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">4</text>
+      <text x="74" y="222" font-size="14" font-weight="700" fill="#2a2418">Reviewer 2 reply</text>
+      <text x="36" y="248" font-size="11.5" fill="#5a5140">"왜 X 안 썼Me?"에</text>
+      <text x="36" y="265" font-size="11.5" fill="#5a5140">from past key_decisions</text>
+      <rect x="36" y="278" width="200" height="28" rx="4" fill="#fdf2ee"/>
+      <text x="46" y="296" font-family="JetBrains Mono, monospace" font-size="10" fill="#c4593f">key_decisions 필드 grep</text>
+    </g>
+
+    <!-- Card 5: Comp exam -->
+    <g>
+      <rect x="265" y="190" width="230" height="130" rx="10" fill="#fff" stroke="#4a7c59" stroke-width="2"/>
+      <circle cx="295" cy="218" r="12" fill="#4a7c59"/>
+      <text x="295" y="223" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">5</text>
+      <text x="319" y="222" font-size="14" font-weight="700" fill="#2a2418">Comp exam prep</text>
+      <text x="281" y="248" font-size="11.5" fill="#5a5140">80편 papers 인용 네트워크</text>
+      <text x="281" y="265" font-size="11.5" fill="#5a5140">Auto으로 그래프화</text>
+      <rect x="281" y="278" width="200" height="28" rx="4" fill="color-mix(in srgb, #4a7c59 8%, #fff)"/>
+      <text x="291" y="296" font-family="JetBrains Mono, monospace" font-size="10" fill="#4a7c59">--predicate cites</text>
+    </g>
+
+    <!-- Pattern card (right bottom) -->
+    <g>
+      <rect x="510" y="190" width="230" height="130" rx="10" fill="#2a2418" stroke="#d88a3a" stroke-width="2"/>
+      <text x="530" y="222" font-size="14" font-weight="800" fill="#d88a3a">Common pattern</text>
+      <text x="530" y="242" font-size="11.5" fill="#f4f1e8">Notes in vault while working</text>
+      <text x="530" y="259" font-size="11.5" fill="#f4f1e8">+ Stop hook Auto-record</text>
+      <text x="530" y="276" font-size="11.5" fill="#f4f1e8">+ ontology Auto 추출</text>
+      <text x="530" y="298" font-size="11" fill="#d88a3a" font-style="italic">→ future-you retrieves instantly</text>
+    </g>
+  </g>
+
+  <!-- bottom note -->
+  <g font-family="Pretendard Variable, Inter, sans-serif" font-size="11.5" fill="#8a7f68">
+    <text x="380" y="346" text-anchor="middle">시스템이 *추가 부담을 주지 않고* — 평소 Work의 흔적만으로 미래의 본인에게 자료를 쌓아둠</text>
+  </g>
+</svg>
+<figcaption>5가지 일상 시Me리오 — 각 카드는 *상황 / 결과 / 핵심 명령*. 우하단은 Common pattern.</figcaption>
+</figure>
+</p>
+<h3 id="scenario-1-dissertation-chapter-writers-block">Scenario 1 — Dissertation chapter writer's block</h3>
+<p><strong>Setup</strong>: writing Chapter 3 methods. Six months ago you had a meeting that finalized the estimation method. Where did you write it?</p>
+<table>
+<thead>
+<tr>
+<th>Without</th>
+<th>With</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Slack DM search + old notes + email → 30-45 min</td>
+<td><code>python query_ontology.py "Method A"</code> → all related sessions. <code>Read wiki/sources/Sessions 2025-11-XX.md</code> → 5-line summary. <strong>3 minutes</strong>.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **Why it works**:Day 3's Stop hook auto-records every session digest.</div>
+
+<h3 id="scenario-2-grant-deadline-d-7-panic">Scenario 2 — Grant deadline D-7 panic</h3>
+<p><strong>Setup</strong>: 9 docx files for one grant. Did they stay consistent?</p>
+<table>
+<thead>
+<tr>
+<th>Without</th>
+<th>With</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Manual diff. <em>"narrative says $35K but current_support says $30K"</em> — easy to miss</td>
+<td>situation_watch reviews changes via LLM every 2h → flags inconsistencies. <strong>Caught before submission</strong>.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **Why it works**:Day 6 situation_watch flags *changes you might miss*.</div>
+
+<h3 id="scenario-3-onboarding-new-advisee">Scenario 3 — Onboarding new advisee</h3>
+<p><strong>Setup</strong>: explain "my research portfolio" in one hour.</p>
+<table>
+<thead>
+<tr>
+<th>Without</th>
+<th>With</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>New PPT → 2-3 hours</td>
+<td><code>/slides my research portfolio</code> + <code>wiki/_ontology_graph.html</code>. <strong>5 minutes</strong>.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **Why it works**:Day 7 + Day 5 build *portfolio-at-a-glance* automatically.</div>
+
+<h3 id="scenario-4-reviewer-2-explain-why-you-didnt-use-method-x">Scenario 4 — Reviewer 2 ("explain why you didn't use method X")</h3>
+<p><strong>Setup</strong>: R&amp;R asks why you rejected method X six months ago.</p>
+<table>
+<thead>
+<tr>
+<th>Without</th>
+<th>With</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Improvise → vague answer</td>
+<td><code>grep "X-method" wiki/sources/Sessions*.md</code> → finds your past <code>key_decisions</code>. <strong>2 minutes</strong>.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **Why it works**:Session digests preserve *decision rationales* — future-you can defend past-you.</div>
+
+<h3 id="scenario-5-comp-exam-quals-prep">Scenario 5 — Comp exam / quals prep</h3>
+<p><strong>Setup</strong>: 80 papers in 6 months. Need the citation network.</p>
+<table>
+<thead>
+<tr>
+<th>Without</th>
+<th>With</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EndNote has metadata; relations are in your head</td>
+<td>If you wrote each paper as <code>wiki/sources/&lt;paper&gt;.md</code> with <code>cites: &lt;span class="wikilink"&gt;Method A&lt;/span&gt;</code> + <code>extends: &lt;span class="wikilink"&gt;Theory B&lt;/span&gt;</code> → ontology auto-builds the graph. <code>--predicate cites</code> for citation network.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **Why it works**:Reading 1-2 papers/day with vault notes → exam prep already done.</div>
+
+<hr />
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **The common pattern**:in all five, *"leave traces while working anyway → computer fetches answers when needed"*. The system is infrastructure that quietly accumulates material for future-you.</div>
+
+<hr />
+<h2 id="common-pitfalls-troubleshooting">Common pitfalls (troubleshooting)</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stop hook doesn't fire</td>
+<td>settings.json escape</td>
+<td><code>\\</code> doubling, <code>\"</code> quoting</td>
+</tr>
+<tr>
+<td>Tracker not firing every 2h</td>
+<td>computer asleep, StartWhenAvailable not set</td>
+<td><code>schtasks /Query /V</code> to see last/next</td>
+</tr>
+<tr>
+<td>Ontology has 0 nodes</td>
+<td>missing <code>type:</code> frontmatter</td>
+<td>add <code>type: project</code> to every entity</td>
+</tr>
+<tr>
+<td><code>query_ontology.py</code> returns nothing</td>
+<td>label case mismatch</td>
+<td>run <code>--type Project</code> first</td>
+</tr>
+<tr>
+<td>situation_watch shows <code>(LLM error)</code></td>
+<td>OpenRouter key issue</td>
+<td>test with curl</td>
+</tr>
+<tr>
+<td><code>/slides</code> produces empty slides</td>
+<td>no entity in vault for topic</td>
+<td>hand-write <code>wiki/entities/&lt;topic&gt;.md</code> first</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **Almost every failure is frontmatter or path-escape.**</div>
+
+<hr />
+<h2 id="customizing-log-every-change-as-a-note">Customizing — log every change as a note</h2>
+<p>Every number/threshold/keyword is <strong>designed to be customized</strong>. As complexity grows, document each change:</p>
+<pre><code>wiki/sources/
+├── My Tracker Setup.md          ← cadence / start time
+├── My LLM Tuning.md              ← model / threshold / keywords
+├── My Ontology Customization.md  ← types/relations
+├── My Hook Setup.md              ← hook events
+└── My Custom Skills.md           ← slash commands / slide skills
+</code></pre>
+<p>Each note: <code>type: source</code> + <code>tags: [tuning, customization]</code> + timestamp. Day 5 ontology auto-picks them up — <code>python query_ontology.py "tuning"</code> answers <em>"how has my system evolved?"</em>.</p>
+<hr />
+<h2 id="core-principles">Core principles</h2>
+<ol>
+<li><strong>A single entry point eliminates search</strong> — <code>Today.md</code> instead of <em>"where did I write that"</em>.</li>
+<li><strong>Memory beats prompt engineering</strong> — <code>~/.claude/projects/&lt;machine&gt;/memory/</code> instead of re-explaining.</li>
+<li><strong>Ontology beats flat tags</strong> — <em>"all grants where I'm PI"</em> in one CLI line.</li>
+<li><strong>LLM at the edges only</strong> — orchestrator is plain Python/PowerShell.</li>
+<li><strong>Auto-apply is conservative</strong> — every LLM proposal has confidence + <code>[REVIEW]</code> fallback.</li>
+<li><strong>Every action must be reversible</strong> — undo, audit logs, regeneratable graph.</li>
+</ol>
+    <div class="closing">
+      <div class="closing-mark">— end of 7-day guide —</div>
+      <div class="closing-note">Stuck? Full guide (<span class="wikilink">Research Assistant System Guide</span>). Happy building!</div>
+      <div class="closing-author">
+        <span class="closing-author-label">Author</span>
+        <strong>Jewoong Moon</strong>
+        <span>The University of Alabama</span>
+        <a href="mailto:jmoon19@ua.edu">jmoon19@ua.edu</a>
+      </div>
+    </div>
+  </article>
+</div>
+
+<footer class="bottom">
+  <div class="bottom-inner">
+    <span>Research Assistant System · Beginner Guide</span>
+    <span>Obsidian × Claude Code × OpenRouter</span>
+    <span>Local-first · BYOK · Open</span>
+  </div>
+</footer>
+
+<script>
+  const links = document.querySelectorAll('.toc a');
+  const sections = Array.from(document.querySelectorAll('article h1, article h2'));
+  function onScroll() {
+    const y = window.scrollY + 120;
+    let active = sections[0]?.id;
+    for (const s of sections) if (s.offsetTop <= y) active = s.id;
+    links.forEach(a => {
+      const isActive = a.getAttribute('href') === '#' + active;
+      a.classList.toggle('active', isActive);
+      // Toggle on parent <li> too so :has() and .has-active both work
+      if (a.parentElement) a.parentElement.classList.toggle('has-active', isActive);
+    });
+  }
+  window.addEventListener('scroll', onScroll); onScroll();
+  // Also handle direct clicks (immediate visual response before scroll fires)
+  links.forEach(a => a.addEventListener('click', () => {
+    links.forEach(x => {
+      x.classList.remove('active');
+      if (x.parentElement) x.parentElement.classList.remove('has-active');
+    });
+    a.classList.add('active');
+    if (a.parentElement) a.parentElement.classList.add('has-active');
+  }));
+
+  // Click-to-copy on prompt boxes
+  document.querySelectorAll('.prompt-box').forEach(box => {
+    box.addEventListener('click', async () => {
+      const pre = box.querySelector('pre');
+      if (!pre) return;
+      try {
+        await navigator.clipboard.writeText(pre.innerText.trim());
+        box.classList.add('copied');
+        setTimeout(() => box.classList.remove('copied'), 1500);
+      } catch (e) {
+        const sel = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(pre);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'f' || e.key === 'F') document.body.classList.toggle('narrow');
+    if (e.key === 'd' || e.key === 'D') document.body.classList.toggle('dark');
+  });
+</script>
+</body></html>
