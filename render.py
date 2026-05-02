@@ -82,7 +82,7 @@ DIAGRAMS["hero"] = """
       <path d="M -9,-5 Q -9,-9 -5,-9 L 5,-9 Q 9,-9 9,-5 L 9,2 Q 9,6 5,6 L 0,6 L -3,9 L -3,6 L -5,6 Q -9,6 -9,2 Z" fill="none" stroke="#9b7eb7" stroke-width="1.5" stroke-linejoin="round"/>
       <text x="0" y="-44" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" letter-spacing="2" fill="#d88a3a">DAY 3</text>
       <text x="0" y="50" text-anchor="middle" font-size="14" font-weight="700">Claude Code</text>
-      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">Stop hook 연결</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">Stop hook</text>
     </g>
 
     <!-- Day 4: Tracker (clock icon) -->
@@ -94,7 +94,7 @@ DIAGRAMS["hero"] = """
       <line x1="0" y1="0" x2="5" y2="2" stroke="#d88a3a" stroke-width="1.5" stroke-linecap="round"/>
       <text x="0" y="-44" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" letter-spacing="2" fill="#d88a3a">DAY 4</text>
       <text x="0" y="50" text-anchor="middle" font-size="14" font-weight="700">Tracker</text>
-      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">Every 2 hours</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">every 2h auto</text>
     </g>
 
     <!-- Day 5: Ontology (graph icon) -->
@@ -205,7 +205,7 @@ DIAGRAMS["before-after"] = """
         <text x="180" y="183" font-size="9" fill="#666">queryable</text>
       </g>
     </svg>
-    <p class="pair-caption">vault = one entry page, no search</p>
+    <p class="pair-caption">vault = one entry page, no search needed</p>
   </div>
 </figure>
 """
@@ -217,7 +217,7 @@ DIAGRAMS["mental-model"] = """
   <g>
     <rect x="60" y="20" width="640" height="70" rx="8" fill="#2d7d6e" opacity="0.08" stroke="#2d7d6e" stroke-width="1.5"/>
     <text x="80" y="44" font-family="Playfair Display, serif" font-weight="700" font-size="17" fill="#2a2418">Layer 1 · Project knowledge</text>
-    <text x="80" y="62" font-family="Inter, sans" font-size="11.5" fill="#5a5140">Notes you write yourself. Permanent.</text>
+    <text x="80" y="62" font-family="Inter, sans" font-size="11.5" fill="#5a5140">Notes you write yourself. Permanent asset.</text>
     <g font-family="JetBrains Mono, monospace" font-size="10" fill="#2a2418">
       <rect x="320" y="48" width="110" height="26" rx="4" fill="#fff" stroke="#2d7d6e"/>
       <text x="330" y="65">wiki/entities/</text>
@@ -231,7 +231,7 @@ DIAGRAMS["mental-model"] = """
   <g>
     <rect x="60" y="105" width="640" height="70" rx="8" fill="#d88a3a" opacity="0.1" stroke="#d88a3a" stroke-width="1.5"/>
     <text x="80" y="129" font-family="Playfair Display, serif" font-weight="700" font-size="17" fill="#2a2418">Layer 2 · Activity log (auto)</text>
-    <text x="80" y="147" font-family="Inter, sans" font-size="11.5" fill="#5a5140">Auto-filled every 2h. Answers "what did I do?"</text>
+    <text x="80" y="147" font-family="Inter, sans" font-size="11.5" fill="#5a5140">Computer fills every 2h. Answers "what did I do?"</text>
     <g font-family="JetBrains Mono, monospace" font-size="10" fill="#2a2418">
       <rect x="320" y="133" width="110" height="26" rx="4" fill="#fff" stroke="#d88a3a"/>
       <text x="330" y="150">activity/...</text>
@@ -245,7 +245,7 @@ DIAGRAMS["mental-model"] = """
   <g>
     <rect x="60" y="190" width="640" height="70" rx="8" fill="#9b7eb7" opacity="0.1" stroke="#9b7eb7" stroke-width="1.5"/>
     <text x="80" y="214" font-family="Playfair Display, serif" font-weight="700" font-size="17" fill="#2a2418">Layer 3 · AI memory</text>
-    <text x="80" y="232" font-family="Inter, sans" font-size="11.5" fill="#5a5140">Auto-loaded by Claude. No re-explaining.</text>
+    <text x="80" y="232" font-family="Inter, sans" font-size="11.5" fill="#5a5140">Auto-loaded by Claude at session start. No re-explaining.</text>
     <g font-family="JetBrains Mono, monospace" font-size="9.5" fill="#2a2418">
       <rect x="320" y="218" width="360" height="26" rx="4" fill="#fff" stroke="#9b7eb7"/>
       <text x="330" y="235">~/.claude/projects/&lt;machine&gt;/memory/MEMORY.md</text>
@@ -313,7 +313,7 @@ DIAGRAMS["tracker-flow"] = """
 
   <!-- bottom note -->
   <g font-family="JetBrains Mono, monospace" font-size="11" fill="#5a5140">
-    <text x="380" y="232" text-anchor="middle">LLM only when judging changes · ~$0.02-0.05/day</text>
+    <text x="380" y="232" text-anchor="middle">LLM only invoked when judging changes · ~$0.02-0.05/day</text>
     <text x="380" y="250" text-anchor="middle" fill="#8a7f68">Everything else: plain PowerShell + Python</text>
   </g>
 
@@ -322,7 +322,7 @@ DIAGRAMS["tracker-flow"] = """
     <marker id="arr3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#d88a3a"/></marker>
   </defs>
 </svg>
-<figcaption>Every 2 hours 흐름 — 입력 5개를 트래커 한 곳이 받아 산출물 5개로 변환.</figcaption>
+<figcaption>Every-2-hours flow — 5 inputs become 5 outputs through one tracker.</figcaption>
 </figure>
 """
 
@@ -357,7 +357,7 @@ DIAGRAMS["checklist"] = """
     <text x="394" y="170">☐ Windows scheduled task perms</text>
   </g>
 </svg>
-<figcaption>Days 1-3 free tools only. Day 4+: LLM key ($1-2/month).</figcaption>
+<figcaption>Days 1-3 free tools only. Day 4+ uses LLM key ($1-2/month).</figcaption>
 </figure>
 """
 
@@ -387,7 +387,7 @@ DIAGRAMS["scenarios"] = """
       <circle cx="295" cy="68" r="12" fill="#d88a3a"/>
       <text x="295" y="73" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">2</text>
       <text x="319" y="72" font-size="14" font-weight="700" fill="#2a2418">Grant D-7 panic</text>
-      <text x="281" y="98" font-size="11.5" fill="#5a5140">9개 docx 일관성 Auto</text>
+      <text x="281" y="98" font-size="11.5" fill="#5a5140">9 docx auto-consistency</text>
       <text x="281" y="115" font-size="11.5" fill="#5a5140">+ deadline D-counter</text>
       <rect x="281" y="128" width="200" height="28" rx="4" fill="#fff8ed"/>
       <text x="291" y="146" font-family="JetBrains Mono, monospace" font-size="10" fill="#d88a3a">situation_watch [AUTO]</text>
@@ -400,9 +400,9 @@ DIAGRAMS["scenarios"] = """
       <text x="540" y="73" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">3</text>
       <text x="564" y="72" font-size="14" font-weight="700" fill="#2a2418">New advisee onboarding</text>
       <text x="526" y="98" font-size="11.5" fill="#5a5140">Portfolio at-a-glance</text>
-      <text x="526" y="115" font-size="11.5" fill="#5a5140">5분 안에 Auto 생성</text>
+      <text x="526" y="115" font-size="11.5" fill="#5a5140">auto-built in 5 min</text>
       <rect x="526" y="128" width="200" height="28" rx="4" fill="color-mix(in srgb, #9b7eb7 8%, #fff)"/>
-      <text x="536" y="146" font-family="JetBrains Mono, monospace" font-size="10" fill="#9b7eb7">/slides 내 portfolio</text>
+      <text x="536" y="146" font-family="JetBrains Mono, monospace" font-size="10" fill="#9b7eb7">/slides my portfolio</text>
     </g>
 
     <!-- Card 4: Reviewer 2 -->
@@ -411,10 +411,10 @@ DIAGRAMS["scenarios"] = """
       <circle cx="50" cy="218" r="12" fill="#c4593f"/>
       <text x="50" y="223" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">4</text>
       <text x="74" y="222" font-size="14" font-weight="700" fill="#2a2418">Reviewer 2 reply</text>
-      <text x="36" y="248" font-size="11.5" fill="#5a5140">"왜 X 안 썼Me?"에</text>
+      <text x="36" y="248" font-size="11.5" fill="#5a5140">"Why not X?" answered</text>
       <text x="36" y="265" font-size="11.5" fill="#5a5140">from past key_decisions</text>
       <rect x="36" y="278" width="200" height="28" rx="4" fill="#fdf2ee"/>
-      <text x="46" y="296" font-family="JetBrains Mono, monospace" font-size="10" fill="#c4593f">key_decisions 필드 grep</text>
+      <text x="46" y="296" font-family="JetBrains Mono, monospace" font-size="10" fill="#c4593f">key_decisions grep</text>
     </g>
 
     <!-- Card 5: Comp exam -->
@@ -423,8 +423,8 @@ DIAGRAMS["scenarios"] = """
       <circle cx="295" cy="218" r="12" fill="#4a7c59"/>
       <text x="295" y="223" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">5</text>
       <text x="319" y="222" font-size="14" font-weight="700" fill="#2a2418">Comp exam prep</text>
-      <text x="281" y="248" font-size="11.5" fill="#5a5140">80편 papers 인용 네트워크</text>
-      <text x="281" y="265" font-size="11.5" fill="#5a5140">Auto으로 그래프화</text>
+      <text x="281" y="248" font-size="11.5" fill="#5a5140">80-paper citation network</text>
+      <text x="281" y="265" font-size="11.5" fill="#5a5140">auto-graphed</text>
       <rect x="281" y="278" width="200" height="28" rx="4" fill="color-mix(in srgb, #4a7c59 8%, #fff)"/>
       <text x="291" y="296" font-family="JetBrains Mono, monospace" font-size="10" fill="#4a7c59">--predicate cites</text>
     </g>
@@ -434,18 +434,18 @@ DIAGRAMS["scenarios"] = """
       <rect x="510" y="190" width="230" height="130" rx="10" fill="#2a2418" stroke="#d88a3a" stroke-width="2"/>
       <text x="530" y="222" font-size="14" font-weight="800" fill="#d88a3a">Common pattern</text>
       <text x="530" y="242" font-size="11.5" fill="#f4f1e8">Notes in vault while working</text>
-      <text x="530" y="259" font-size="11.5" fill="#f4f1e8">+ Stop hook Auto-record</text>
-      <text x="530" y="276" font-size="11.5" fill="#f4f1e8">+ ontology Auto 추출</text>
+      <text x="530" y="259" font-size="11.5" fill="#f4f1e8">+ Stop hook auto-record</text>
+      <text x="530" y="276" font-size="11.5" fill="#f4f1e8">+ ontology auto-extracts</text>
       <text x="530" y="298" font-size="11" fill="#d88a3a" font-style="italic">→ future-you retrieves instantly</text>
     </g>
   </g>
 
   <!-- bottom note -->
   <g font-family="Pretendard Variable, Inter, sans-serif" font-size="11.5" fill="#8a7f68">
-    <text x="380" y="346" text-anchor="middle">시스템이 *추가 부담을 주지 않고* — 평소 Work의 흔적만으로 미래의 본인에게 자료를 쌓아둠</text>
+    <text x="380" y="346" text-anchor="middle">The system adds *no extra burden* — it accumulates material for future-you from the traces of your normal work.</text>
   </g>
 </svg>
-<figcaption>5가지 일상 시Me리오 — 각 카드는 *상황 / 결과 / 핵심 명령*. 우하단은 Common pattern.</figcaption>
+<figcaption>5 daily scenarios — each card shows *setup / outcome / key command*. Bottom-right is the common pattern.</figcaption>
 </figure>
 """
 
@@ -464,7 +464,7 @@ DIAGRAMS["agents"] = """
     <g font-family="Pretendard Variable, Inter, sans-serif" font-size="12" fill="#2a2418">
       <text x="40" y="112">✓ Stop hook auto (session digest)</text>
       <text x="40" y="132">✓ Slash commands (/slides /recall)</text>
-      <text x="40" y="152">✓ MEMORY.md Auto 로드</text>
+      <text x="40" y="152">✓ MEMORY.md auto-load</text>
       <text x="40" y="172">✓ CLAUDE.md parent-walked</text>
       <text x="40" y="192">✓ 200K-1M context</text>
     </g>
@@ -478,7 +478,7 @@ DIAGRAMS["agents"] = """
 
     <g font-family="Pretendard Variable, Inter, sans-serif" font-size="12" fill="#2a2418">
       <text x="410" y="112">○ No hooks (manual codex_digest.ps1)</text>
-      <text x="410" y="132">○ AGENTS.md Auto 로드</text>
+      <text x="410" y="132">○ AGENTS.md auto-load</text>
       <text x="410" y="152">○ Sessions = ~/.codex/sessions/</text>
       <text x="410" y="172">✓ Image gen / reasoning mode</text>
       <text x="410" y="192">✓ VS Code IDE integration</text>
@@ -516,7 +516,7 @@ DIAGRAMS["agents"] = """
   <g font-family="Pretendard Variable, Inter, sans-serif" font-size="12.5" fill="#2a2418">
     <rect x="20" y="384" width="720" height="28" rx="8" fill="#f6f3ea" stroke="#5a5140" stroke-dasharray="3 3"/>
     <text x="40" y="402" font-weight="700" fill="#5a5140">Rule:</text>
-    <text x="80" y="402" fill="#5a5140">vault Work·Auto화 hook = <tspan fill="#2d7d6e" font-weight="700">Claude Code CLI</tspan> · quick chat = <tspan fill="#2d7d6e" font-weight="700">Claude Desktop</tspan> · code backup = <tspan fill="#d88a3a" font-weight="700">Codex</tspan></text>
+    <text x="80" y="402" fill="#5a5140">vault work + automation hooks = <tspan fill="#2d7d6e" font-weight="700">Claude Code CLI</tspan> · quick chat = <tspan fill="#2d7d6e" font-weight="700">Claude Desktop</tspan> · code backup = <tspan fill="#d88a3a" font-weight="700">Codex</tspan></text>
   </g>
 
   <defs>
@@ -621,11 +621,11 @@ DIAGRAMS["schema"] = """
   <g font-family="Pretendard Variable, Inter, sans-serif" font-size="12.5" fill="#2a2418">
     <rect x="20" y="240" width="720" height="64" rx="8" fill="#f6f3ea" stroke="#5a5140" stroke-dasharray="3 3"/>
     <text x="40" y="262" font-weight="700" font-size="13">How to read:</text>
-    <text x="40" y="282" fill="#5a5140">예) <tspan font-family="JetBrains Mono, monospace" fill="#2d7d6e" font-weight="700">[Project]</tspan> <tspan font-family="JetBrains Mono, monospace" fill="#d88a3a" font-weight="700">hasPI</tspan> <tspan font-family="JetBrains Mono, monospace" fill="#d88a3a" font-weight="700">[Person]</tspan>  =  "Project A's PI is Dr. Smith"</text>
-    <text x="40" y="298" fill="#5a5140">예) <tspan font-family="JetBrains Mono, monospace" fill="#2d7d6e" font-weight="700">[Project]</tspan> <tspan font-family="JetBrains Mono, monospace" fill="#2d7d6e" font-weight="700">usesMethod</tspan> <tspan font-family="JetBrains Mono, monospace" fill="#9b7eb7" font-weight="700">[Concept]</tspan>  =  "Project A uses Method A"</text>
+    <text x="40" y="282" fill="#5a5140">e.g. <tspan font-family="JetBrains Mono, monospace" fill="#2d7d6e" font-weight="700">[Project]</tspan> <tspan font-family="JetBrains Mono, monospace" fill="#d88a3a" font-weight="700">hasPI</tspan> <tspan font-family="JetBrains Mono, monospace" fill="#d88a3a" font-weight="700">[Person]</tspan>  =  "Project A's PI is Dr. Smith"</text>
+    <text x="40" y="298" fill="#5a5140">e.g. <tspan font-family="JetBrains Mono, monospace" fill="#2d7d6e" font-weight="700">[Project]</tspan> <tspan font-family="JetBrains Mono, monospace" fill="#2d7d6e" font-weight="700">usesMethod</tspan> <tspan font-family="JetBrains Mono, monospace" fill="#9b7eb7" font-weight="700">[Concept]</tspan>  =  "Project A uses Method A"</text>
   </g>
 </svg>
-<figcaption>스키마 = 타입 6종 + 관계 10종. 본인이 entity 페이지를 쓰면 Auto으로 이 그래프가 만들어집니다.</figcaption>
+<figcaption>Schema = 6 types + 10 relations. Writing entity pages auto-builds this graph.</figcaption>
 </figure>
 """
 
@@ -695,7 +695,7 @@ DIAGRAMS["ontology-preview"] = """
     <circle cx="614" cy="116" r="5" fill="#c4593f"/><text x="626" y="120">Course</text>
   </g>
 </svg>
-<figcaption>온톨로지 미리보기 — 본인 vault에서 Auto 추출된 노드와 관계. D3 그래프는 실제로 더 풍부합니다 (보통 100-200 노드).</figcaption>
+<figcaption>Ontology preview — auto-extracted nodes and relations from your vault. The D3 graph is richer (~100-200 nodes).</figcaption>
 </figure>
 """
 
@@ -717,13 +717,13 @@ DIAGRAMS["weekly-flow"] = """
       <circle cx="220" cy="100" r="10" fill="#f59e0b"/>
       <text x="220" y="105" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">Work</text>
       <text x="220" y="135" text-anchor="middle" font-size="11" font-weight="600">Claude Code session</text>
-      <text x="220" y="150" text-anchor="middle" font-size="10" opacity="0.7">CLAUDE.md Auto</text>
+      <text x="220" y="150" text-anchor="middle" font-size="10" opacity="0.7">CLAUDE.md auto</text>
       <text x="220" y="165" text-anchor="middle" font-size="10" opacity="0.7">loads → instant context</text>
     </g>
     <g>
       <circle cx="380" cy="100" r="10" fill="#10b981"/>
       <text x="380" y="105" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">2h</text>
-      <text x="380" y="135" text-anchor="middle" font-size="11" font-weight="600">트래커 Auto 갱신</text>
+      <text x="380" y="135" text-anchor="middle" font-size="11" font-weight="600">Tracker auto-runs</text>
       <text x="380" y="150" text-anchor="middle" font-size="10" opacity="0.7">Scans new notes</text>
       <text x="380" y="165" text-anchor="middle" font-size="10" opacity="0.7">/ ontology rebuild</text>
     </g>
@@ -732,7 +732,7 @@ DIAGRAMS["weekly-flow"] = """
       <text x="540" y="105" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">End</text>
       <text x="540" y="135" text-anchor="middle" font-size="11" font-weight="600">Stop hook → digest</text>
       <text x="540" y="150" text-anchor="middle" font-size="10" opacity="0.7">Sessions/&lt;date&gt;.md</text>
-      <text x="540" y="165" text-anchor="middle" font-size="10" opacity="0.7">에 Auto 추가</text>
+      <text x="540" y="165" text-anchor="middle" font-size="10" opacity="0.7">auto-appended</text>
     </g>
     <g>
       <circle cx="680" cy="100" r="10" fill="#b5392a"/>
@@ -822,14 +822,14 @@ def render(md_path: Path, out_path: Path) -> None:
     body_html, toc_html = build_toc(body_html)
 
     html_doc = f"""<!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{htmllib.escape(title)}</title>
 
 <!-- SEO + canonical -->
-<meta name="description" content="Obsidian + Claude Code 7-Day Setup 가이드. 박사·연구자용 AI 보조 시스템. 매일 1-2시간 · Monthly $1-2 · 로컬 우선.">
+<meta name="description" content="Obsidian + Claude Code 7-day setup guide. AI research assistant for PhDs and researchers. 1-2 hours/day · ~$1-2/month · local-first.">
 <meta name="author" content="{htmllib.escape(author)}">
 <link rel="canonical" href="https://educatian.github.io/research-assistant-ai-workflow-en/">
 
@@ -841,7 +841,7 @@ def render(md_path: Path, out_path: Path) -> None:
 <meta property="og:image" content="https://educatian.github.io/research-assistant-ai-workflow-en/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="A Research Assistant System for PhDs — beginner guide — Author 문제웅, The University of Alabama">
+<meta property="og:image:alt" content="A Research Assistant System for PhDs — beginner guide — Author Jewoong Moon, The University of Alabama">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Research Assistant AI Workflow">
 <meta property="article:author" content="{htmllib.escape(author)}">
@@ -878,10 +878,10 @@ def render(md_path: Path, out_path: Path) -> None:
       <a class="byline-mail" href="mailto:{htmllib.escape(contact)}">{htmllib.escape(contact)}</a>
     </div>''' if author else ''}
     <div class="mast-meta">
-      <div><span>Total</span><strong>7일</strong></div>
-      <div><span>Per day</span><strong>1-2시간</strong></div>
+      <div><span>Total</span><strong>7 days</strong></div>
+      <div><span>Per day</span><strong>1-2h</strong></div>
       <div><span>Monthly</span><strong>$1-2</strong></div>
-      <div><span>대상</span><strong>PhD / researcher</strong></div>
+      <div><span>Audience</span><strong>PhD / researcher</strong></div>
     </div>
   </div>
 </header>
@@ -1534,7 +1534,7 @@ body.narrow .prose { max-width: 620px; }
 }
 .prompt-box pre::before { content: none; }
 .prompt-box::after {
-  content: "📋 클릭해서 복사";
+  content: "📋 click to copy";
   position: absolute;
   bottom: 10px;
   right: 14px;
@@ -1544,7 +1544,7 @@ body.narrow .prose { max-width: 620px; }
   opacity: 0.5;
   pointer-events: none;
 }
-.prompt-box.copied::after { content: "✓ 복사됨"; opacity: 1; color: var(--accent); }
+.prompt-box.copied::after { content: "✓ copied"; opacity: 1; color: var(--accent); }
 .prompt-box pre { cursor: pointer; }
 
 .callout strong {
