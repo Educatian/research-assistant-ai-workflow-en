@@ -879,7 +879,7 @@ def render(md_path: Path, out_path: Path) -> None:
     </div>''' if author else ''}
     <div class="mast-meta">
       <div><span>Total</span><strong>7 days</strong></div>
-      <div><span>Per day</span><strong>1-2h</strong></div>
+      <div><span>Per day</span><strong>1-2 hours</strong></div>
       <div><span>Monthly</span><strong>$1-2</strong></div>
       <div><span>Audience</span><strong>PhD / researcher</strong></div>
     </div>

@@ -282,7 +282,7 @@ OG_HTML = """<!DOCTYPE html>
 
     <div class="stats">
       <div class="stat"><div class="label">Length</div><div class="value">7 days</div></div>
-      <div class="stat"><div class="label">Per day</div><div class="value">1-2h</div></div>
+      <div class="stat"><div class="label">Per day</div><div class="value">1-2hr</div></div>
       <div class="stat"><div class="label">Monthly</div><div class="value">$1-2</div></div>
       <div class="stat"><div class="label">Format</div><div class="value">local</div></div>
     </div>
