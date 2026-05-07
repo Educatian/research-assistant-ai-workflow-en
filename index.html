@@ -864,9 +864,39 @@ body::before {
   .bottom-inner { flex-direction: column; gap: 12px; align-items: flex-start; }
   .diagram-hero { margin-left: -5vw; margin-right: -5vw; }
 }
+
+/* Language toggle — fixed top-right, links to KO repo */
+.lang-toggle {
+  position: fixed; top: 18px; right: 18px; z-index: 200;
+  display: flex; align-items: center; gap: 0;
+  padding: 6px 10px;
+  border: 1.5px solid var(--border-strong);
+  background: rgba(var(--bg-rgb), .82);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600;
+}
+.lang-toggle a {
+  color: var(--text-3); padding: 3px 8px;
+  text-decoration: none; border-radius: 4px;
+  transition: color .15s, background .15s;
+}
+.lang-toggle a:hover { color: var(--text-1); background: var(--surface-2); }
+.lang-toggle a.active { color: var(--text-1); background: var(--surface-2); font-weight: 800; }
+.lang-toggle .sep { color: var(--text-3); padding: 0 2px; opacity: .5; }
+@media (max-width: 640px) {
+  .lang-toggle { right: auto; left: 18px; top: auto; bottom: 18px; }
+}
 </style>
 </head>
 <body>
+
+<div class="lang-toggle" role="navigation" aria-label="Language">
+  <a href="./" class="active" data-lang="en">EN</a>
+  <span class="sep">·</span>
+  <a href="https://educatian.github.io/research-assistant-ai-workflow-ko/" data-lang="ko">한국어</a>
+</div>
 
 <header class="masthead">
   <div class="mast-inner">
