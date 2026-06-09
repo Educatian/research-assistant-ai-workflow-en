@@ -28,10 +28,13 @@ else:
     GUIDE = Path(args[0]) if len(args) > 0 else Path("full-guide.md")
     OUT   = Path(args[1]) if len(args) > 1 else Path("full-guide.html")
 
-BASE = {
+SITES = {
     "ko": "https://educatian.github.io/research-assistant-ai-workflow-ko",
     "en": "https://educatian.github.io/research-assistant-ai-workflow-en",
-}[lang]
+}
+BASE = SITES[lang]
+KO_FG = SITES["ko"] + "/full-guide.html"
+EN_FG = SITES["en"] + "/full-guide.html"
 
 UI = {
     "ko": dict(
@@ -92,6 +95,19 @@ def main() -> None:
     tiles = "".join(f"<div><span>{htmllib.escape(a)}</span><strong>{htmllib.escape(b)}</strong></div>"
                     for a, b in UI["tiles"])
 
+    # Language toggle (한 / EN) — current language is a non-link active pill,
+    # the other links to that language's full-guide on its own GitHub Pages site.
+    def opt(code, label, url, title_attr):
+        if code == lang:
+            return f'<span class="lt active" aria-current="page">{label}</span>'
+        return f'<a class="lt" href="{url}" hreflang="{code}" title="{title_attr}">{label}</a>'
+    langtoggle = (
+        '<span class="langtoggle" role="group" aria-label="language">'
+        + opt("ko", "한국어", KO_FG, "한국어 풀 가이드")
+        + opt("en", "EN", EN_FG, "English full guide")
+        + "</span>"
+    )
+
     html_doc = f"""<!DOCTYPE html>
 <html lang="{lang}">
 <head>
@@ -108,6 +124,9 @@ def main() -> None:
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="theme-color" content="#2d7d6e">
+<link rel="alternate" hreflang="ko" href="{KO_FG}">
+<link rel="alternate" hreflang="en" href="{EN_FG}">
+<link rel="alternate" hreflang="x-default" href="{EN_FG}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -115,17 +134,28 @@ def main() -> None:
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
 <style>{base.BEGINNER_CSS}</style>
 <style>
-.backbar {{ max-width: 1180px; margin: 0 auto; padding: 18px 5vw 0; }}
-.backbar a {{ font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--accent);
+.backbar {{ max-width: 1180px; margin: 0 auto; padding: 18px 5vw 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }}
+.bb-back {{ font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--accent);
   text-decoration: none; border-bottom: 1px solid transparent; }}
-.backbar a:hover {{ border-bottom-color: var(--accent); }}
+.bb-back:hover {{ border-bottom-color: var(--accent); }}
+.langtoggle {{ display: inline-flex; border: 1px solid var(--border-strong); border-radius: 999px;
+  overflow: hidden; font-family: "JetBrains Mono", monospace; font-size: 12px; }}
+.langtoggle .lt {{ display: inline-block; padding: 4px 12px; text-decoration: none;
+  color: var(--accent); background: transparent; line-height: 1.6; transition: background .15s, color .15s; }}
+.langtoggle a.lt:hover {{ background: color-mix(in srgb, var(--accent) 10%, transparent); }}
+.langtoggle .lt.active {{ background: var(--accent); color: #fff; font-weight: 600; cursor: default; }}
+.langtoggle .lt + .lt {{ border-left: 1px solid var(--border-strong); }}
 a.wikilink {{ text-decoration: none; cursor: pointer; }}
 a.wikilink:hover {{ filter: brightness(1.08); }}
 </style>
 </head>
 <body>
 
-<div class="backbar"><a href="index.html">{htmllib.escape(UI['back'])}</a></div>
+<div class="backbar">
+  <a class="bb-back" href="index.html">{htmllib.escape(UI['back'])}</a>
+  {langtoggle}
+</div>
 
 <header class="masthead">
   <div class="mast-inner">
