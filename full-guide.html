@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Assistant System Guide</title>
+<meta name="description" content="The full reference for the Obsidian × Claude Code research-assistant system — architecture, scripts, ontology, privacy.">
+<link rel="canonical" href="https://educatian.github.io/research-assistant-ai-workflow-en/full-guide.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Research Assistant System Guide">
+<meta property="og:description" content="The full reference for the Obsidian × Claude Code research-assistant system — architecture, scripts, ontology, privacy.">
+<meta property="og:url" content="https://educatian.github.io/research-assistant-ai-workflow-en/full-guide.html">
+<meta property="og:image" content="https://educatian.github.io/research-assistant-ai-workflow-en/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="theme-color" content="#2d7d6e">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500&family=Hahmlet:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<style>
+/* Adapted directly from open-design html-ppt-course-module skill tokens
+   (warm paper + teal-green accent), adjusted for long-form scrolling docs. */
+:root {
+  --bg: #fbfaf6;
+  --bg-soft: #f4f1e8;
+  --bg-rgb: 251,250,246;
+  --surface: #ffffff;
+  --surface-2: #f6f3ea;
+  --border: rgba(60,45,20,.12);
+  --border-strong: rgba(60,45,20,.24);
+  --text-1: #2a2418;
+  --text-2: #5a5140;
+  --text-3: #8a7f68;
+  --text-rgb: 42,36,24;
+  --accent:   #2d7d6e;   /* teal-green */
+  --accent-2: #d88a3a;   /* warm orange */
+  --accent-3: #c4593f;   /* rust */
+  --good: #4a7c59;
+  --warn: #d88a3a;
+  --bad:  #c4593f;
+  --grad: linear-gradient(135deg,#2d7d6e,#4ea893);
+  --shadow: 0 12px 30px rgba(60,45,20,.07);
+  --shadow-lg: 0 24px 60px rgba(60,45,20,.12);
+  --radius: 14px;
+  --radius-lg: 20px;
+
+  --serif: "Hahmlet", "Playfair Display", "Apple SD Gothic Neo", Georgia, serif;
+  --sans: "Pretendard Variable", "Pretendard", "Inter", -apple-system, "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", "IBM Plex Mono", "Cascadia Code", "D2Coding", Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-1);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "ss02", "cv01", "cv11";  /* Pretendard polish */
+  word-break: keep-all;        /* Korean line-break preserves words */
+  overflow-wrap: break-word;
+}
+body.dark {
+  --bg: #1c1812;
+  --bg-soft: #2a2418;
+  --surface: #2a2418;
+  --surface-2: #322a1d;
+  --border: rgba(244,241,232,.08);
+  --border-strong: rgba(244,241,232,.18);
+  --text-1: #f4f1e8;
+  --text-2: #c2b89f;
+  --text-3: #8a7f68;
+  --text-rgb: 244,241,232;
+}
+
+/* Masthead — course-module hero feel */
+.masthead {
+  padding: 96px 5vw 64px;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.masthead::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%);
+  pointer-events: none;
+}
+.mast-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+.mast-kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  margin-bottom: 24px;
+}
+.mast-kicker::before { content: "✦ "; color: var(--accent); }
+.mast-title {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: clamp(40px, 6vw, 76px);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  margin: 0 0 24px;
+  color: var(--text-1);
+}
+.mast-deck {
+  font-family: var(--sans);
+  font-size: clamp(17px, 1.5vw, 22px);
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--text-2);
+  margin: 0 0 28px;
+  max-width: 680px;
+}
+.mast-byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 40px;
+  padding: 12px 0;
+  border-top: 1px dashed var(--border);
+  border-bottom: 1px dashed var(--border);
+  max-width: 680px;
+}
+.byline-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 700;
+}
+.byline-name {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.005em;
+}
+.byline-aff {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text-2);
+}
+.byline-sep {
+  color: var(--text-3);
+  font-size: 12px;
+}
+.byline-mail {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent-2);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--accent-2);
+  padding-bottom: 1px;
+}
+.byline-mail:hover { color: var(--accent-3); border-color: var(--accent-3); }
+.mast-meta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  max-width: 760px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.mast-meta > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 24px 20px 0;
+  border-right: 1px dashed var(--border);
+}
+.mast-meta > div:last-child { border-right: none; }
+.mast-meta span {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 600;
+}
+.mast-meta strong {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* Layout — sidebar + main, course-module style */
+.layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 72px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 72px 5vw 96px;
+}
+
+/* TOC sidebar — mimics course-module .obj-list with ○/●/▸ progression */
+.toc {
+  position: sticky;
+  top: 20px;
+  align-self: start;
+  /* internal scroll when TOC exceeds viewport */
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-right: 1px solid var(--border);
+  padding: 4px 24px 16px 0;
+  /* Firefox scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+/* WebKit scrollbar — thin teal */
+.toc::-webkit-scrollbar { width: 4px; }
+.toc::-webkit-scrollbar-track { background: transparent; }
+.toc::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--accent) 50%, transparent);
+  border-radius: 2px;
+}
+.toc::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+.toc-brand {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.toc-brand::before { content: "✦"; color: var(--accent-2); font-size: 18px; }
+.toc-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-3);
+  margin: 0 0 14px;
+}
+.toc ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text-2);
+  line-height: 1.45;
+}
+.toc li {
+  padding: 7px 0 7px 22px;
+  position: relative;
+  border-bottom: 1px dashed var(--border);
+}
+.toc li::before {
+  content: "○";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  color: var(--accent);
+  font-size: 13px;
+  line-height: 1;
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+.toc li.lvl1 { font-weight: 600; }
+.toc li.lvl1::before { content: "●"; }
+.toc li.lvl2 { padding-left: 32px; font-size: 12px; }
+.toc li.lvl2::before { left: 12px; font-size: 10px; top: 8px; }
+.toc a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+  line-height: 1.4;
+  transition: color 0.15s;
+}
+.toc a:hover { color: var(--text-1); }
+.toc li:hover::before { color: var(--accent-2); }
+
+/* Active state — bullet becomes filled accent-2 (warm orange) */
+.toc li.has-active::before,
+.toc li:has(> a.active)::before {
+  content: "●";
+  color: var(--accent-2);
+  transform: scale(1.15);
+}
+.toc li.has-active,
+.toc li:has(> a.active) {
+  color: var(--text-1);
+  font-weight: 700;
+}
+.toc li.has-active > a,
+.toc li:has(> a.active) > a {
+  color: var(--accent-3);
+}
+.toc .num {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-3);
+  margin-right: 6px;
+}
+.toc-foot {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-3);
+}
+.toc-foot p { margin: 4px 0; }
+.toc-foot kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+/* Prose — academic but friendly */
+.prose {
+  max-width: 760px;
+  font-size: 17px;
+  line-height: 1.8;
+  counter-reset: section;
+}
+body.narrow .prose { max-width: 620px; }
+
+.prose h1 {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: clamp(36px, 4vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 64px 0 32px;
+  color: var(--text-1);
+}
+
+.prose h2 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  margin: 96px 0 24px;
+  color: var(--text-1);
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  position: relative;
+}
+.prose h2::before {
+  content: counter(section, decimal-leading-zero);
+  counter-increment: section;
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-2);
+  letter-spacing: 0.1em;
+  background: var(--surface-2);
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  flex: none;
+  position: relative;
+  top: -4px;
+}
+.prose h2::after {
+  content: "";
+  position: absolute;
+  bottom: -16px;
+  left: 0;
+  width: 72px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.prose h3 {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.005em;
+  margin: 48px 0 14px;
+  color: var(--text-1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.prose h3::before {
+  content: "";
+  width: 4px;
+  height: 18px;
+  background: var(--accent);
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.prose p { margin: 0 0 20px; color: var(--text-2); }
+.prose p strong { color: var(--text-1); font-weight: 700; }
+.prose em { font-style: italic; color: var(--text-2); }
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  transition: color 0.15s;
+}
+.prose a:hover { color: var(--accent-3); text-decoration-color: var(--accent-3); }
+.prose ul, .prose ol { margin: 0 0 20px; padding-left: 20px; color: var(--text-2); }
+.prose li { margin-bottom: 8px; }
+.prose ul li { list-style: none; position: relative; padding-left: 6px; }
+.prose ul li::before {
+  content: "○";
+  color: var(--accent);
+  position: absolute;
+  left: -16px;
+  top: 0;
+}
+.prose ol li::marker { color: var(--accent); font-weight: 600; }
+
+/* Inline code */
+.prose code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: var(--accent-3);
+}
+
+/* Block code — course-module dark warm-brown */
+.prose pre {
+  background: #2a2418;
+  color: #f4f1e8;
+  padding: 22px 26px;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  font-size: 13.5px;
+  line-height: 1.7;
+  margin: 24px 0;
+  font-family: var(--mono);
+  position: relative;
+  box-shadow: var(--shadow);
+}
+.prose pre::before {
+  content: "code";
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a7f68;
+}
+.prose pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* Wikilink chip — cream pill */
+.wikilink {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.84em;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+/* Tables — academic concept-box vibe */
+.prose table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 32px 0;
+  font-size: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.prose th, .prose td {
+  text-align: left;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.prose tr:last-child td { border-bottom: none; }
+.prose th {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 12px;
+  font-weight: 700;
+}
+.prose tr:hover td { background: color-mix(in srgb, var(--accent) 4%, transparent); }
+.prose td code { font-size: 12px; }
+
+/* Callouts — directly mirroring course-module .callout */
+.callout {
+  margin: 28px 0;
+  padding: 18px 24px;
+  border-left: 4px solid;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--surface-2);
+  font-size: 15.5px;
+  line-height: 1.7;
+}
+.callout-tip   { border-left-color: var(--accent-2); background: #fff8ed; }
+.callout-warn  { border-left-color: var(--accent-3); background: #fdf2ee; }
+.callout-check { border-left-color: var(--accent);   background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+
+/* Prompt-box: side-by-side natural-language alternative to raw commands.
+   Indigo/purple to distinguish from teal (TIP) / orange (WARN) / green (CHECK). */
+.prompt-box {
+  margin: 18px 0 28px;
+  border: 1.5px solid #9b7eb7;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, #9b7eb7 5%, var(--surface));
+  overflow: hidden;
+  position: relative;
+}
+.prompt-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #fff;
+  background: #9b7eb7;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.prompt-label .prompt-icon { font-size: 13px; }
+.prompt-box pre {
+  margin: 0;
+  padding: 18px 22px;
+  background: transparent;
+  color: var(--text-1);
+  border: none;
+  border-left: none;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+.prompt-box pre::before { content: none; }
+.prompt-box::after {
+  content: "📋 click to copy";
+  position: absolute;
+  bottom: 10px;
+  right: 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: #9b7eb7;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.prompt-box.copied::after { content: "✓ copied"; opacity: 1; color: var(--accent); }
+.prompt-box pre { cursor: pointer; }
+
+.callout strong {
+  color: var(--text-1);
+  font-weight: 700;
+}
+.callout-tip strong b, .callout-tip > b { color: var(--accent-2); }
+
+.cb {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin-right: 12px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  vertical-align: 1px;
+}
+.callout-tip .cb   { background: var(--accent-2); color: #fff; }
+.callout-warn .cb  { background: var(--accent-3); color: #fff; }
+.callout-check .cb { background: var(--accent);   color: #fff; }
+
+/* Day exercise blocks — auto-detect "Day N —" h2 sections */
+.prose h2[id^="day-"]::before { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* Concept callout (the > with no emoji prefix becomes a regular blockquote) */
+.prose blockquote {
+  margin: 28px 0;
+  padding: 20px 26px;
+  border-left: 4px solid var(--accent);
+  background: var(--surface);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-family: var(--serif);
+  font-size: 17px;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--text-2);
+  box-shadow: var(--shadow);
+}
+.prose blockquote strong {
+  font-style: normal;
+  color: var(--accent);
+  font-family: var(--sans);
+  font-weight: 700;
+}
+.prose blockquote p:last-child { margin-bottom: 0; }
+
+/* Diagrams — concept-box style cards */
+.diagram {
+  margin: 40px 0;
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  position: relative;
+}
+.diagram::before {
+  content: "FIG";
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-3);
+}
+.diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+.diagram figcaption {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--text-2);
+  margin: 20px 0 0;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border);
+  text-align: center;
+}
+
+.diagram-hero {
+  margin: 0 -5vw 64px;
+  padding: 0;
+  background: linear-gradient(135deg, #2a2418 0%, #3a2f1c 100%);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.diagram-hero::before { display: none; }
+
+.diagram-pair {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 20px;
+  align-items: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+}
+.diagram-pair::before { display: none; }
+.pair-side {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 20px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.pair-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  background: var(--text-3);
+  color: var(--surface);
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 3px;
+  margin-bottom: 14px;
+}
+.pair-arrow {
+  font-family: var(--serif);
+  font-size: 36px;
+  color: var(--accent-2);
+  text-align: center;
+}
+.pair-caption {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  text-align: center;
+  margin: 14px 0 0;
+  color: var(--text-2);
+}
+
+/* Day exercise / phase divider — show 7-day timeline at top of each day */
+.prose h2[id^="day-"] {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 8%, var(--bg)), transparent);
+  padding: 16px 20px 16px 0;
+  margin-left: -20px;
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+
+/* Closing */
+.closing {
+  margin-top: 120px;
+  padding: 56px 40px;
+  background: var(--surface-2);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  border-top: 4px solid var(--accent);
+}
+.closing-mark {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 26px;
+  color: var(--accent);
+  margin-bottom: 12px;
+  letter-spacing: 0.02em;
+}
+.closing-mark::before, .closing-mark::after { content: "✦"; color: var(--accent-2); margin: 0 12px; font-style: normal; }
+.closing-note {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--text-2);
+}
+.closing-author {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  align-items: baseline;
+  font-size: 13px;
+  color: var(--text-2);
+}
+.closing-author-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 700;
+}
+.closing-author strong {
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.closing-author a {
+  color: var(--accent-2);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 12px;
+  border-bottom: 1px dashed var(--accent-2);
+}
+.closing-author a:hover { color: var(--accent-3); border-color: var(--accent-3); }
+
+/* Footer */
+.bottom {
+  border-top: 1px solid var(--border);
+  background: #2a2418;
+  color: #f4f1e8;
+  padding: 32px 5vw;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.bottom-inner {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1280px;
+  margin: 0 auto;
+  align-items: center;
+}
+.bottom-inner span:first-child::before {
+  content: "✦";
+  color: var(--accent-2);
+  margin-right: 8px;
+}
+
+/* Subtle paper texture (optional) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 25% 20%, rgba(216,138,58,0.02), transparent 40%),
+    radial-gradient(circle at 75% 80%, rgba(45,125,110,0.02), transparent 40%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; gap: 40px; padding-top: 48px; }
+  .toc { position: static; padding-right: 0; border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+  .mast-meta { grid-template-columns: repeat(2, 1fr); }
+  .mast-meta > div:nth-child(2) { border-right: none; }
+  .diagram-pair { grid-template-columns: 1fr; }
+  .pair-arrow { transform: rotate(90deg); padding: 12px 0; }
+  .bottom-inner { flex-direction: column; gap: 12px; align-items: flex-start; }
+  .diagram-hero { margin-left: -5vw; margin-right: -5vw; }
+}
+</style>
+<style>
+.backbar { max-width: 1180px; margin: 0 auto; padding: 18px 5vw 0; }
+.backbar a { font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--accent);
+  text-decoration: none; border-bottom: 1px solid transparent; }
+.backbar a:hover { border-bottom-color: var(--accent); }
+a.wikilink { text-decoration: none; cursor: pointer; }
+a.wikilink:hover { filter: brightness(1.08); }
+</style>
+</head>
+<body>
+
+<div class="backbar"><a href="index.html">← Back to the 7-day tutorial</a></div>
+
+<header class="masthead">
+  <div class="mast-inner">
+    <div class="mast-kicker">REFERENCE · FULL GUIDE</div>
+    <h1 class="mast-title">Research Assistant System Guide</h1>
+    <p class="mast-deck">Obsidian × Claude Code — the full reference — the complete 14-component reference.</p>
+    <div class="mast-meta"><div><span>Type</span><strong>Reference</strong></div><div><span>Length</span><strong>16 sections</strong></div><div><span>References</span><strong>17 verified</strong></div><div><span>Audience</span><strong>After setup</strong></div></div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="toc">
+    <div class="toc-label">Contents</div>
+    <ol><li class="lvl1"><a href="#obsidian-claude-code-research-assistant-system"><span class="num">01</span> Obsidian × Claude Code Research-Assistant System</a></li>
+<li class="lvl2"><a href="#1-what-you-get"><span class="num">02</span> 1. What you get</a></li>
+<li class="lvl2"><a href="#2-architecture"><span class="num">03</span> 2. Architecture</a></li>
+<li class="lvl2"><a href="#3-prerequisites"><span class="num">04</span> 3. Prerequisites</a></li>
+<li class="lvl2"><a href="#4-setup-walkthrough"><span class="num">05</span> 4. Setup walkthrough</a></li>
+<li class="lvl2"><a href="#5-components-in-detail"><span class="num">06</span> 5. Components in detail</a></li>
+<li class="lvl2"><a href="#6-daily-flow-what-it-looks-like-in-practice"><span class="num">07</span> 6. Daily flow (what it looks like in practice)</a></li>
+<li class="lvl2"><a href="#7-cost-amp-performance"><span class="num">08</span> 7. Cost &amp;amp; performance</a></li>
+<li class="lvl2"><a href="#8-privacy-and-safety"><span class="num">09</span> 8. Privacy and safety</a></li>
+<li class="lvl2"><a href="#9-customization"><span class="num">10</span> 9. Customization</a></li>
+<li class="lvl2"><a href="#10-troubleshooting"><span class="num">11</span> 10. Troubleshooting</a></li>
+<li class="lvl2"><a href="#11-ontology-as-event-hub-the-unifying-spine"><span class="num">12</span> 11. Ontology as event-hub (the unifying spine)</a></li>
+<li class="lvl2"><a href="#12-why-this-works-design-notes"><span class="num">13</span> 12. Why this works (design notes)</a></li>
+<li class="lvl2"><a href="#13-repository-layout-suggested"><span class="num">14</span> 13. Repository layout (suggested)</a></li>
+<li class="lvl2"><a href="#14-acknowledgements"><span class="num">15</span> 14. Acknowledgements</a></li>
+<li class="lvl2"><a href="#15-design-rationale-and-evidence-base"><span class="num">16</span> 15. Design rationale and evidence base</a></li>
+<li class="lvl2"><a href="#16-references-and-further-reading"><span class="num">17</span> 16. References and further reading</a></li></ol>
+    <div class="toc-foot">
+      <p><kbd>F</kbd> narrow · <kbd>D</kbd> dark mode</p>
+    </div>
+  </aside>
+  <article class="prose">
+    <h1 id="obsidian-claude-code-research-assistant-system">Obsidian × Claude Code Research-Assistant System</h1>
+<p>A reproducible setup for academic researchers who want one persistent knowledge graph that <strong>(a) builds itself from your project files</strong>, <strong>(b) updates as you work</strong>, and <strong>(c) answers structured queries</strong> ("who is the PI of X?", "what methods does Y use?", "what changed this week?"). The system runs locally, uses Claude Code (or Codex) as the agent, Obsidian as the vault UI, and OpenRouter (Gemini Flash) for cheap LLM judgment.</p>
+<blockquote>
+<p><strong>Why this exists</strong> — researchers accumulate fragmented context (project drafts, meeting notes, methodology decisions, grant deadlines, advisee status) across dozens of folders. A vault by itself just stores; this layer makes it self-organizing and queryable. The single entry point page replaces the daily "where did I leave off?" search.</p>
+</blockquote>
+<h2 id="1-what-you-get">1. What you get</h2>
+<ul>
+<li><strong>Single entry-point page</strong> (<code>wiki/Today.md</code>) — every session opens here. Has a routing cheat-sheet, current deadlines, project-priority tiers, and an auto-updated "Recent activity" block.</li>
+<li><strong>Knowledge ontology</strong> (197+ nodes / 2200+ edges) auto-extracted from frontmatter + wikilinks, exported as JSON-LD + interactive D3 graph. Query by entity ("MyProject"), predicate ("hasPI"), or type ("Grant").</li>
+<li><strong>Auto session digests</strong> — every Claude Code or Codex session ends with a structured note in <code>wiki/sources/Sessions YYYY-MM-DD.md</code> (goal · outcome · key decisions · files touched · next).</li>
+<li><strong>Research-note watcher</strong> — every 2 hours, scans new notes/source files, LLM-judges what changed, proposes vault updates (deadlines, status, new collaborators) in <code>wiki/situation/YYYY-MM-DD.md</code>. Auto-applies high-confidence changes.</li>
+<li><strong>Desktop organizer</strong> — LLM judges loose files at Desktop root, files them into structured folders, leaves a manifest <code>Desktop\_organize_log\&lt;run-id&gt;.txt</code> with <code>--undo</code> support.</li>
+<li><strong>/slides workflow</strong> — <code>/slides &lt;topic&gt;</code> generates a single-file HTML slide deck using cached open-design skill templates + your vault content.</li>
+<li><strong>Persistent memory</strong> — <code>~\.claude\projects\&lt;machine&gt;\memory\</code> auto-loads on every session; future sessions know your projects, advisees, methods, preferences without re-explanation.</li>
+</ul>
+<p>All running locally. ~$0.02-0.05/day in LLM costs.</p>
+<h2 id="2-architecture">2. Architecture</h2>
+<pre><code>                 ┌──────────────────────────────────────────────────────┐
+                 │  Obsidian vault (wiki/)                              │
+                 │                                                      │
+                 │   entities/    projects · people · grants · labs     │
+                 │   concepts/    methodology · theory · patterns       │
+                 │   sources/     manuscripts · digests · session logs  │
+                 │   activity/    daily auto-aggregated activity        │
+                 │   situation/   LLM-judged change proposals           │
+                 │                                                      │
+                 │   Today.md  ← single entry point                     │
+                 │   _ontology.json + _ontology_graph.html              │
+                 └──────────────────────────────────────────────────────┘
+                                       ▲
+                                       │
+   ┌───────────────────────────────────┼───────────────────────────────────┐
+   │                                   │                                   │
+   ▼                                   ▼                                   ▼
+Session digests              Daily tracker (every 2h)              On-demand commands
+(Claude Stop hook +          ─────────────────────────             /slides · /recall
+codex_digest.ps1)            • file activity scan                  query_ontology.py
+                             • git commits                         apply_situation.py
+                             • GitHub events                       organize_desktop.py
+                             • calendar / notes                    
+                             • ontology rebuild
+                             • situation watch (LLM)
+                             • desktop organizer (LLM)
+</code></pre>
+<p>Three persistence layers:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Where</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Project knowledge</strong></td>
+<td><code>wiki/</code></td>
+<td>Citable, queryable facts about projects/methods/people. Entity pages with frontmatter (<code>type:</code>, <code>deadline:</code>, <code>status:</code>).</td>
+</tr>
+<tr>
+<td><strong>Activity / aggregates</strong></td>
+<td><code>wiki/activity/</code> + <code>wiki/situation/</code> + <code>wiki/sources/Sessions YYYY-MM-DD.md</code></td>
+<td>Time-series snapshots auto-written by the tracker and session hooks.</td>
+</tr>
+<tr>
+<td><strong>Auto memory</strong></td>
+<td><code>~\.claude\projects\&lt;machine&gt;\memory\</code></td>
+<td>Cross-session pointers Claude reads on startup. Index file <code>MEMORY.md</code> always in context.</td>
+</tr>
+</tbody>
+</table>
+<p>Privacy posture: everything is <strong>local-first</strong>. The vault is plain markdown. The only external calls are (a) optional OpenRouter LLM completion and (b) optional <code>gh</code> CLI for GitHub activity. Sensitive sources stay outside the vault — see § 8.</p>
+<h2 id="3-prerequisites">3. Prerequisites</h2>
+<ul>
+<li><strong>Obsidian</strong> (v1.9.10+ recommended)</li>
+<li><strong>Claude Code</strong> CLI installed and authenticated</li>
+<li><strong>Python 3.11+</strong> (for the scripts)</li>
+<li><strong>PowerShell</strong> (Windows) — Bash on macOS/Linux works similarly with minor path edits</li>
+<li><strong><code>gh</code> CLI</strong> authenticated (optional — for GitHub activity)</li>
+<li><strong>OpenRouter API key</strong> stored at <code>_secrets/openrouter.txt</code> or in <code>$env:OPENROUTER_API_KEY</code> (optional — for LLM judgment; system gracefully degrades without it)</li>
+<li>A Python venv or system install with: <code>pdfplumber</code>, <code>python-docx</code>, <code>openpyxl</code>, <code>python-pptx</code> for source-file text extraction</li>
+</ul>
+<h2 id="4-setup-walkthrough">4. Setup walkthrough</h2>
+<h3 id="41-vault-bootstrap">4.1 Vault bootstrap</h3>
+<p>Start from the <a href="https://github.com/AgriciDaniel/claude-obsidian">claude-obsidian</a> seed, or any blank Obsidian vault. The folder layout this guide assumes:</p>
+<pre><code>ObsidianVault/
+├── CLAUDE.md             ← vault-level Claude Code instructions
+├── wiki/
+│   ├── Today.md          ← single entry point (write the template once)
+│   ├── index.md          ← table of contents
+│   ├── overview.md       ← project-portfolio narrative
+│   ├── log.md            ← append-only event log
+│   ├── entities/
+│   ├── concepts/
+│   ├── sources/
+│   ├── activity/         ← created automatically
+│   ├── situation/        ← created automatically
+│   ├── _ontology.json    ← generated
+│   ├── _ontology_summary.md
+│   └── _ontology_graph.html
+└── scripts/              ← all automation lives here
+</code></pre>
+<p>Write a few entity pages by hand to seed the system — for each major project/grant/method, create <code>wiki/entities/&lt;Name&gt;.md</code> with this frontmatter:</p>
+<pre><code class="language-yaml">---
+type: project        # or grant | concept | person | course | manuscript | lab | tool
+title: &quot;MyProject&quot;
+status: active
+tier: 2
+deadline: 2026-05-20
+related:
+  - &quot;&lt;span class=&quot;wikilink&quot;&gt;Jane Researcher&lt;/span&gt;&quot;
+  - &quot;&lt;span class=&quot;wikilink&quot;&gt;Bayesian Causal Forest&lt;/span&gt;&quot;
+---
+# MyProject
+
+[narrative body — methodology, status, decisions, links to other entities]
+</code></pre>
+<p>The richer the cross-linking (<code>&lt;span class="wikilink"&gt;...&lt;/span&gt;</code> wikilinks in body text), the better the ontology will reconstruct relationships.</p>
+<h3 id="42-user-level-claudemd-the-always-load-instructions">4.2 User-level CLAUDE.md (the "always-load" instructions)</h3>
+<p>Drop a CLAUDE.md at <code>C:\Users\&lt;you&gt;\CLAUDE.md</code> (or <code>~/CLAUDE.md</code>). Claude Code walks the parent chain and auto-loads this from any working directory. This is what makes "기억해봐 / tell me about X" instantly grounded.</p>
+<p>Key contents:</p>
+<pre><code class="language-markdown"># User-level Claude Code instructions
+
+## On every session start
+1. Read `&lt;vault&gt;/wiki/Today.md` — single entry point.
+2. Auto-memory at `~\.claude\projects\&lt;machine&gt;\memory\MEMORY.md` is already loaded.
+3. Prefer existing knowledge bases over reasoning from scratch.
+
+## Knowledge bases (in priority order)
+| Source | What | How to query |
+|---|---|---|
+| wiki/Today.md | deadlines, priorities, recent | Read |
+| wiki/_ontology.json | structured: 12 entity types + 14 relations | Read or query_ontology.py |
+| wiki/entities/&lt;Name&gt;.md | per-entity narrative | Read directly |
+| wiki/concepts/ | methodology pages | Read |
+| wiki/situation/&lt;date&gt;.md | latest LLM-judged changes | Read |
+| wiki/sources/Sessions &lt;date&gt;.md | session logs | Read for &quot;what did I do&quot; |
+
+## On &quot;make a slide deck / PT 만들어&quot;
+Invoke /slides &lt;topic&gt; — see ~/.claude/commands/slides.md.
+</code></pre>
+<h3 id="43-slash-commands">4.3 Slash commands</h3>
+<p><code>~/.claude/commands/recall.md</code>:</p>
+<pre><code class="language-markdown">---
+description: Recall context for a topic from vault + ontology + memory
+argument-hint: &quot;[topic or question]&quot;
+---
+Read wiki/Today.md first. If $ARGUMENTS names a topic, drill: entity page → ontology query → daily situation note. Cite via &lt;span class=&quot;wikilink&quot;&gt;wikilinks&lt;/span&gt;. Korean reply OK.
+</code></pre>
+<p><code>~/.claude/commands/slides.md</code> — see § 6 for the full spec.</p>
+<h3 id="44-scripts">4.4 Scripts</h3>
+<p>Drop these in <code>&lt;vault&gt;/scripts/</code> (full content in the companion code repo). Brief purpose of each:</p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Trigger</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>update_today.ps1</code></td>
+<td>Stop hook + manual</td>
+<td>Refreshes <code>Today.md</code> § Recent block (last 7d vault edits, deadlines from frontmatter)</td>
+</tr>
+<tr>
+<td><code>save_session.ps1</code></td>
+<td>Stop hook</td>
+<td>Calls digest_session.py with the transcript, then update_today.ps1</td>
+</tr>
+<tr>
+<td><code>digest_session.py</code></td>
+<td>called by save_session</td>
+<td>Parses Claude/Codex JSONL transcript, LLM-summarizes, appends to <code>wiki/sources/Sessions YYYY-MM-DD.md</code></td>
+</tr>
+<tr>
+<td><code>codex_digest.ps1</code></td>
+<td>manual after Codex session</td>
+<td>Finds latest Codex rollout, runs digest_session.py</td>
+</tr>
+<tr>
+<td><code>daily_tracker.ps1</code></td>
+<td>every 2h scheduled task</td>
+<td>Orchestrator — calls all collectors below</td>
+</tr>
+<tr>
+<td><code>build_ontology.py</code></td>
+<td>tracker §8</td>
+<td>Walks <code>wiki/</code>, parses frontmatter + wikilinks, emits <code>_ontology.json</code> + summary + D3 graph</td>
+</tr>
+<tr>
+<td><code>situation_watch.py</code></td>
+<td>tracker §9</td>
+<td>Scans new research notes/source files added to vault since last run, LLM-judges changes, writes <code>wiki/situation/&lt;date&gt;.md</code></td>
+</tr>
+<tr>
+<td><code>apply_situation.py</code></td>
+<td>manual</td>
+<td>Applies AUTO blocks from situation note → entity pages + ontology rebuild</td>
+</tr>
+<tr>
+<td><code>organize_desktop.py</code></td>
+<td>tracker §10</td>
+<td>LLM-files Desktop root loose files into structured folders, writes <code>_organize_log/&lt;run&gt;.txt</code></td>
+</tr>
+<tr>
+<td><code>query_ontology.py</code></td>
+<td>manual / from /recall</td>
+<td>Fast lookup against <code>_ontology.json</code> (<code>--type Grant</code>, <code>--predicate hasPI</code>, <code>&lt;pattern&gt;</code>)</td>
+</tr>
+<tr>
+<td><code>collect_github.ps1</code></td>
+<td>tracker</td>
+<td>gh CLI for PRs/issues/pushes</td>
+</tr>
+<tr>
+<td><code>collect_calendar.ps1</code></td>
+<td>tracker</td>
+<td>Outlook calendar today+tomorrow</td>
+</tr>
+<tr>
+<td><code>collect_notes.ps1</code></td>
+<td>tracker</td>
+<td>Sticky Notes (UWP plum.sqlite) + Outlook Notes folder</td>
+</tr>
+<tr>
+<td><code>collect_social.ps1</code></td>
+<td>tracker</td>
+<td>Stub for LinkedIn/X/Notion if user wires tokens</td>
+</tr>
+</tbody>
+</table>
+<h3 id="45-claude-code-stop-hook">4.5 Claude Code Stop hook</h3>
+<p>Edit <code>~\.claude\settings.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;hooks&quot;: {
+    &quot;Stop&quot;: [
+      {
+        &quot;matcher&quot;: &quot;*&quot;,
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;powershell.exe -NoProfile -ExecutionPolicy Bypass -File \&quot;&lt;vault&gt;\\scripts\\save_session.ps1\&quot; -Source claude&quot;
+          }
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+<p>After this, every Claude Code session that ends will auto-write a structured digest to <code>wiki/sources/Sessions YYYY-MM-DD.md</code>.</p>
+<h3 id="46-windows-scheduled-task-every-2h">4.6 Windows scheduled task (every 2h)</h3>
+<pre><code class="language-powershell">schtasks.exe /Create /TN &quot;ResearchAssistantTracker&quot; /SC DAILY /ST 00:00 /RI 120 /DU 23:59 /TR &quot;powershell.exe -NoProfile -ExecutionPolicy Bypass -File &lt;vault&gt;\scripts\daily_tracker.ps1&quot; /F
+
+# Allow run-when-missed (catch-up after computer was off):
+$task = Get-ScheduledTask -TaskName ResearchAssistantTracker
+$task.Settings.StartWhenAvailable = $true
+$task.Settings.DisallowStartIfOnBatteries = $false
+$task.Settings.StopIfGoingOnBatteries = $false
+Set-ScheduledTask -TaskName ResearchAssistantTracker -Settings $task.Settings
+</code></pre>
+<p>The task runs 12 times/day (00:00, 02:00, …, 22:00). If the computer is off during a slot, Windows fires it as soon as possible after wake; the tracker's dynamic-window logic uses a <code>.tracker_state.json</code> to compute "time since last successful run" and widens its scan window accordingly (capped at 7 days).</p>
+<h2 id="5-components-in-detail">5. Components in detail</h2>
+<h3 id="51-the-vault-ontology">5.1 The vault ontology</h3>
+<p>The schema lives at <code>wiki/concepts/Vault Ontology.md</code> — a human-readable spec of 12 entity types and 14 relations. Build script <code>build_ontology.py</code>:</p>
+<ol>
+<li>Walks every <code>wiki/**/*.md</code>, parses frontmatter for <code>type:</code>.</li>
+<li>Registers each page as a node, keyed by <code>vault:&lt;type&gt;/&lt;slug&gt;</code>.</li>
+<li>For each <code>&lt;span class="wikilink"&gt;wikilink&lt;/span&gt;</code> in body text, looks at a ±100 character window around the link and tries to match a relation cue:
+   - "PI" / "Principal Investigator" → <code>hasPI</code>
+   - "advisee of" / "supervised by" → <code>advisedBy</code>
+   - "uses" / "applies" / "method" → <code>usesMethod</code>
+   - "funded by" / "$" → <code>fundedBy</code>
+   - … 14 relations total.</li>
+<li><strong>Type-domain enforcement</strong> — if subject type doesn't match the relation's declared domain (e.g. <code>hasPI</code> is <code>Project|Grant → Person</code>), it swaps subject/object. This handles the common pattern where a person's page mentions "<span class="wikilink">MyProject</span> (PI)" → emits <code>MyProject hasPI &lt;Person&gt;</code>, not the reverse.</li>
+<li>Emits <code>_ontology.json</code> (JSON-LD with foaf/schema/skos/vault namespaces), <code>_ontology_summary.md</code> (counts + hubs + orphans), <code>_ontology_triples.tsv</code> (flat for grep), and <code>_ontology_graph.html</code> (D3 force-directed, type-colored nodes, type filter checkboxes).</li>
+</ol>
+<p>Querying:</p>
+<pre><code class="language-bash">python query_ontology.py &quot;MyProject&quot;          # show entity + outbound + inbound
+python query_ontology.py --predicate hasPI  # all PI relationships
+python query_ontology.py --type Grant       # all grants with email_count etc.
+python query_ontology.py --orphans          # degree-0 nodes (likely stubs)
+</code></pre>
+<p>Sample output for a Person node — shows the grants where that person is PI (<code>hasPI</code>), their advisees (<code>advisedBy</code>), and collaborators.</p>
+<h3 id="52-todaymd-as-the-entry-point">5.2 Today.md as the entry point</h3>
+<p><code>Today.md</code> has a strict structure:</p>
+<ol>
+<li><strong>§ 1 Routing cheat-sheet</strong> — table of "if you ask X, look here Y"</li>
+<li><strong>§ 2 Active deadlines</strong> — auto-collected from any entity page with <code>deadline: YYYY-MM-DD</code> in frontmatter</li>
+<li><strong>§ 3 Project priority tiers</strong> — manually edited (this is the only section the user touches regularly)</li>
+<li><strong>§ 4 Recent activity (auto)</strong> — last 7d vault edits + new source files added (between <code>&lt;!-- BEGIN AUTO RECENT --&gt;</code> markers, regenerated by <code>update_today.ps1</code>)</li>
+<li><strong>§ 5 Outstanding follow-ups</strong> — manual queue</li>
+<li><strong>§ 6 Sessions / automation status</strong> — table of all hooks/jobs with what + trigger</li>
+<li><strong>§ 7 Quick commands</strong> — the 5-6 most-used PowerShell commands</li>
+</ol>
+<p>The Stop hook regenerates § 4 after every Claude Code session, so it's never stale.</p>
+<h3 id="53-session-digests">5.3 Session digests</h3>
+<p>When a Claude Code session ends, the Stop hook receives <code>transcript_path</code> via stdin JSON. <code>digest_session.py</code>:</p>
+<ol>
+<li>Parses the JSONL — for Claude Code: <code>type=user|assistant</code> with <code>message.content</code> blocks. For Codex: <code>type=response_item</code> with nested <code>payload.type=message|function_call|custom_tool_call</code>.</li>
+<li>Counts: user messages, files Edited/Written/Read, Bash commands.</li>
+<li>Sends top-30 user messages + last assistant text + tool signals to OpenRouter Gemini Flash with prompt: "summarize as JSON <code>{topic, goal, outcome, key_decisions, next, tags}</code>."</li>
+<li>Appends a <code>## HH:MM-HH:MM [source] &lt;topic&gt; (sid: 8char)</code> section to <code>wiki/sources/Sessions YYYY-MM-DD.md</code>.</li>
+<li>One-line entry to <code>wiki/log.md</code>.</li>
+</ol>
+<p>Sessions &lt;3 user messages are skipped. Cost per session: ~$0.001.</p>
+<p>For Codex (no Stop hook), user runs <code>pwsh codex_digest.ps1</code> after each session — finds latest <code>~/.codex/sessions/*.jsonl</code> and runs the same digest.</p>
+<h3 id="54-situation-watch-research-note-tracker">5.4 Situation watch (research-note tracker)</h3>
+<p>The most LLM-heavy component. Every 2h:</p>
+<ol>
+<li>Scan vault <code>wiki/sources/</code> and <code>wiki/.raw/</code> for <strong>new or modified files</strong> since <code>situation_eval</code>'s last-seen timestamp (tracked in a small SQLite table or JSON file).</li>
+<li>Triage: score each new note by (a) entity matches against the ontology vocab (149 entities), (b) importance keywords ("deadline", "decision", "submitted", "rejected", "approved", "Co-PI", "defense", "R&amp;R", "IRB approval", + Korean equivalents), (c) attachment count.</li>
+<li>Top-N (default 10) → OpenRouter with a strict prompt: identify situational changes as JSON <code>{entity_label, change_type, new_value, evidence_quote, confidence, auto_applicable, reasoning}</code>.</li>
+<li>Output to <code>wiki/situation/YYYY-MM-DD.md</code> with <code>[AUTO]</code> and <code>[REVIEW]</code> blocks plus a triage table.</li>
+<li>Mark all evaluated note IDs in <code>situation_eval</code> so they don't re-LLM next run.</li>
+</ol>
+<p>Auto-apply policy is conservative: <code>confidence ≥ 0.85</code> AND <code>change_type ∈ {deadline_update, status_update, progress_update}</code>. Everything else (role changes, new collaborators, new methods) waits for user review.</p>
+<p><code>apply_situation.py</code> reads the daily note, finds <code>[AUTO]</code> blocks, looks up the target entity page, upserts frontmatter (<code>deadline:</code> / <code>status:</code>), appends a <code>## Recent situation updates</code> body line with the evidence quote, logs to <code>wiki/log.md</code>, and finally rebuilds the ontology. Result: the network graph reflects new state within minutes.</p>
+<h3 id="55-desktop-organizer">5.5 Desktop organizer</h3>
+<p>When you save random files to your desktop, <code>organize_desktop.py</code> (every 2h, with <code>--apply</code>):</p>
+<ol>
+<li>Lists Desktop root files only — never recurses into structured folders.</li>
+<li>Skips: <code>credential.txt</code> and other secrets; <code>~$*</code> Word/Excel lock files; <code>desktop.ini</code>; files modified in the last 60 minutes (probably actively editing); dot-files; <code>*.lnk</code>/<code>*.crdownload</code>/<code>*.tmp</code>.</li>
+<li>For each candidate: extracts text preview (PDF via pdfplumber, docx via python-docx, etc.), sends to LLM with the whitelist of destinations (<code>_archive</code>, <code>_projects</code>, <code>_writing</code>, <code>22_Grants</code>, <code>20_Advising</code>, <code>27_Media/_screenshots</code> …) and the ontology entity catalog.</li>
+<li>LLM returns <code>{action, destination, destination_subpath, confidence, reason}</code>.</li>
+<li><strong>Auto-move only at confidence ≥ 0.90</strong> AND the destination is whitelisted. Everything else stays as REVIEW in the manifest.</li>
+<li>Manifest: <code>Desktop\_organize_log\YYYY-MM-DD_HHmm.txt</code>. Plain text, three sections (Files moved / Proposed / Needs review), every move with FROM → TO + reason + confidence.</li>
+<li>Every move appended to <code>Desktop\_organize_log\.history.jsonl</code> for <code>--undo &lt;run-id&gt;</code> reversibility.</li>
+</ol>
+<p>Forbidden destination: <code>_secrets</code>. If the LLM ever proposes routing a file there, the script downgrades to <code>review_needed</code>.</p>
+<h3 id="56-slides-workflow">5.6 /slides workflow</h3>
+<p>The user types <code>/slides &lt;topic&gt;</code> (or natural language "PT 만들어 줘 / make a deck about X"). The slash command at <code>~/.claude/commands/slides.md</code> instructs the agent to:</p>
+<ol>
+<li>Pick a skill from cached templates at <code>Desktop\_tools\open-design-cache\skills\</code>. Cached from <a href="https://github.com/nexu-io/open-design"><code>nexu-io/open-design</code></a>:
+   - <code>magazine-web-ppt</code> (default, editorial magazine)
+   - <code>html-ppt-knowledge-arch-blueprint</code> (research methodology / system architecture)
+   - <code>html-ppt-course-module</code> (teaching / workshop)
+   - <code>html-ppt-pitch-deck</code> (grant proposal / fundraising)
+   - <code>html-ppt-product-launch</code> (tool/feature reveal)</li>
+<li>Read <code>SKILL.md</code> + <code>references/*.md</code> + <code>assets/template.html</code> (or <code>example.html</code>) — these are inert markdown/HTML specs, no code execution.</li>
+<li>Pull vault content for the topic: <code>wiki/entities/&lt;topic&gt;.md</code> → <code>wiki/concepts/</code> → <code>query_ontology.py "&lt;topic&gt;"</code> → optional web research when vault is thin.</li>
+<li>Propose 8-15 slide outline first; user OKs.</li>
+<li>Generate single-file self-contained HTML at <code>Desktop\_PTs\&lt;YYYY-MM-DD&gt;_&lt;topic-slug&gt;\index.html</code> — all CSS/JS inline, fonts from CDN.</li>
+<li>Append entry to <code>wiki/sources/Decks &lt;year&gt;.md</code>.</li>
+</ol>
+<p>Cost: ~3-5 minutes generation, $0.005-0.02 per deck depending on length.</p>
+<h2 id="6-daily-flow-what-it-looks-like-in-practice">6. Daily flow (what it looks like in practice)</h2>
+<p><strong>Morning</strong> — open vault, look at <code>Today.md</code>. § 2 shows current deadlines (D-counter), § 3 shows project priority tiers, § 4 shows what changed in the last 7 days (and what new research notes / source files were added overnight).</p>
+<p><strong>During work</strong> — start a Claude Code session anywhere on your machine. CLAUDE.md auto-loads, MEMORY.md auto-loads, you can immediately ask "what's the status of X?" or "make a slide deck about Y". The agent has full context without re-explanation.</p>
+<p><strong>Every 2 hours (background)</strong> — tracker fires. New source files in <code>wiki/sources/</code> get scanned, important changes proposed in <code>wiki/situation/&lt;date&gt;.md</code>, ontology rebuilt, Today.md refreshed, Desktop loose files filed away.</p>
+<p><strong>End of session</strong> — Stop hook runs digest_session.py, appends a structured entry to <code>wiki/sources/Sessions &lt;date&gt;.md</code>. The next session you open can <code>Read</code> it to remember what you decided.</p>
+<p><strong>End of week</strong> — review <code>wiki/situation/&lt;date&gt;.md</code> files for proposed changes, apply via <code>apply_situation.py</code>, glance at <code>wiki/sources/Sessions &lt;date&gt;.md</code> for a record of what you actually built.</p>
+<h2 id="7-cost-amp-performance">7. Cost &amp; performance</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Frequency</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Daily tracker (collectors only, no LLM)</td>
+<td>every 2h</td>
+<td>~free, ~30s wall time</td>
+</tr>
+<tr>
+<td>Ontology rebuild</td>
+<td>every 2h</td>
+<td>~free, ~3s</td>
+</tr>
+<tr>
+<td>Situation watch (LLM)</td>
+<td>every 2h, top-10 of new notes</td>
+<td>~$0.001-0.005/run</td>
+</tr>
+<tr>
+<td>Session digest (LLM)</td>
+<td>every session end</td>
+<td>~$0.001/session</td>
+</tr>
+<tr>
+<td>Desktop organizer (LLM)</td>
+<td>every 2h, ~5-15 loose files/day</td>
+<td>~$0.001/day</td>
+</tr>
+<tr>
+<td>/slides generation (LLM via Claude Code itself)</td>
+<td>on demand</td>
+<td>~$0.005-0.02/deck</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td><strong>~$0.02-0.05/day</strong> with Gemini Flash via OpenRouter</td>
+</tr>
+</tbody>
+</table>
+<p>Switch to <code>anthropic/claude-3.5-haiku</code> for ~10× quality at ~10× cost (still under $0.50/day).</p>
+<h2 id="8-privacy-and-safety">8. Privacy and safety</h2>
+<ul>
+<li><strong>Vault contains aggregates only</strong>, not raw sensitive content. Email bodies, IRB participant data, and credential files <strong>never enter the vault</strong>. Source notes added by you are visible to the LLM during situation_watch summarization, so don't paste sensitive PII into research notes you want auto-processed — keep those in a separate folder excluded from the watcher.</li>
+<li><strong>Desktop organizer</strong> has explicit <code>_secrets</code> ban (LLM-recommended secrets routing is downgraded to manual review). It also skips files modified in the last 60 minutes (probably in active edit), Word/Excel lock files, and any <code>desktop.ini</code> / <code>thumbs.db</code>.</li>
+<li><strong>Undo support</strong> — every desktop move is logged to <code>_organize_log/.history.jsonl</code>; <code>python organize_desktop.py --undo &lt;run-id&gt;</code> reverses an entire run.</li>
+<li><strong>Apply policy</strong> for situation_watch is conservative — only <code>deadline_update / status_update / progress_update</code> with confidence ≥ 0.85 auto-apply. Role changes, new collaborators, funding decisions all stay as REVIEW.</li>
+<li><strong>Local-first</strong> — vault is plain markdown, ontology is plain JSON-LD. No proprietary format, no sync requirement. Works offline (LLM steps gracefully skipped without network).</li>
+<li><strong>OpenRouter key</strong> stored only in <code>_secrets/</code> outside the vault, read at runtime. Never committed.</li>
+</ul>
+<h2 id="9-customization">9. Customization</h2>
+<h3 id="add-a-new-entity-type">Add a new entity type</h3>
+<ol>
+<li>Add a row to <code>wiki/concepts/Vault Ontology.md</code> § 1 (Entity types).</li>
+<li>Add type detection rule in <code>build_ontology.py</code>'s <code>infer_type()</code> (path-based fallback or <code>type:</code> frontmatter).</li>
+<li>Add to <code>query_ontology.py</code>'s type filter if you want <code>--type</code> lookup.</li>
+</ol>
+<h3 id="add-a-new-relation">Add a new relation</h3>
+<ol>
+<li>Add a row to <code>wiki/concepts/Vault Ontology.md</code> § 2 (Relation types) with cue phrases.</li>
+<li>Add an entry to <code>RELATION_RULES</code> dict in <code>build_ontology.py</code> with cue regexes + subject_types + object_types.</li>
+<li>Future ontology rebuilds pick it up automatically.</li>
+</ol>
+<h3 id="add-a-new-slide-skill">Add a new slide skill</h3>
+<pre><code class="language-bash">gh api &quot;repos/nexu-io/open-design/contents/skills/&lt;skill-id&gt;/SKILL.md&quot; --jq '.content' | base64 -d &gt; Desktop\_tools\open-design-cache\skills\&lt;skill-id&gt;\SKILL.md
+gh api &quot;repos/nexu-io/open-design/contents/skills/&lt;skill-id&gt;/example.html&quot; --jq '.content' | base64 -d &gt; Desktop\_tools\open-design-cache\skills\&lt;skill-id&gt;\example.html
+</code></pre>
+<p>Then add a routing rule to <code>~/.claude/commands/slides.md</code> § 2.</p>
+<h3 id="add-a-new-collector-to-the-daily-tracker">Add a new collector to the daily tracker</h3>
+<p>Add a new section in <code>daily_tracker.ps1</code> after the existing § 1-10 blocks. Pattern:</p>
+<pre><code class="language-powershell">$lines += ''
+$lines += '## My new collector'
+$lines += ''
+$out = &amp; &lt;command&gt; 2&gt;$null
+if ($out) { $lines += $out } else { $lines += '- (no new &lt;thing&gt;)' }
+</code></pre>
+<h3 id="replace-openrouter-with-another-llm-provider">Replace OpenRouter with another LLM provider</h3>
+<p>All scripts read <code>OPENROUTER_URL</code> and <code>MODEL</code> constants at the top. Swap to <code>https://api.anthropic.com/v1/messages</code> (with header changes) or local Ollama (<code>http://localhost:11434/api/chat</code>) — keep the response_format JSON contract the same.</p>
+<h2 id="10-troubleshooting">10. Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Today.md § Recent</code> not updating</td>
+<td>Stop hook not configured or PowerShell path wrong</td>
+<td>Check <code>~\.claude\settings.json</code>; run <code>powershell -File save_session.ps1</code> manually</td>
+</tr>
+<tr>
+<td>Tracker fires but no <code>activity/&lt;date&gt;.md</code></td>
+<td>scheduled task running with wrong user / no profile</td>
+<td><code>schtasks /Query /TN ResearchAssistantTracker /V /FO LIST</code>, check Logon Mode</td>
+</tr>
+<tr>
+<td><code>query_ontology.py</code> returns "no matches"</td>
+<td>label case-mismatch or page lacks frontmatter <code>type:</code></td>
+<td>grep the entity, add <code>type: project</code> to its frontmatter, rebuild ontology</td>
+</tr>
+<tr>
+<td>Situation watch outputs <code>(LLM error)</code></td>
+<td>OpenRouter key missing/expired or rate-limited</td>
+<td><code>cat _secrets/openrouter.txt</code>, test with <code>curl ...models</code></td>
+</tr>
+<tr>
+<td>Wrong file moved by organize_desktop</td>
+<td>overconfident LLM judgment</td>
+<td><code>python organize_desktop.py --undo &lt;run-id&gt;</code> from manifest, raise <code>AUTO_THRESHOLD</code></td>
+</tr>
+<tr>
+<td>Slides skill missing</td>
+<td>not cached locally</td>
+<td><code>gh api repos/nexu-io/open-design/contents/skills/&lt;id&gt;/SKILL.md ...</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="11-ontology-as-event-hub-the-unifying-spine">11. Ontology as event-hub (the unifying spine)</h2>
+<p>Most of the components above produce daily markdown files (<code>activity/&lt;date&gt;.md</code>, <code>situation/&lt;date&gt;.md</code>, <code>sources/Sessions &lt;date&gt;.md</code>). Each is queryable, but they live in separate folders. To make "show me everything about MyProject in the past 7 days" answerable in one query, the ontology absorbs <strong>selected events as first-class nodes</strong>.</p>
+<h3 id="what-gets-noded-vs-what-stays-as-property">What gets noded vs what stays as property</h3>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Where it lives</th>
+<th>Becomes ontology node?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Daily activity log</td>
+<td><code>wiki/activity/&lt;date&gt;.md</code></td>
+<td>No — too noisy, file-write churn would dominate</td>
+</tr>
+<tr>
+<td>Situation change</td>
+<td><code>wiki/situation/&lt;date&gt;.md</code></td>
+<td>No — applied changes mutate the target entity's frontmatter (<code>deadline:</code>, <code>status:</code>) and that's already picked up</td>
+</tr>
+<tr>
+<td>Desktop file move</td>
+<td><code>Desktop\_organize_log\&lt;run&gt;.txt</code></td>
+<td>No — pure file-system action, no semantic relation</td>
+</tr>
+<tr>
+<td><strong>Session digest</strong></td>
+<td><code>wiki/sources/Sessions &lt;date&gt;.md</code></td>
+<td><strong>Yes — Session node + <code>aboutEntity</code> edges</strong></td>
+</tr>
+<tr>
+<td><strong>Slide deck generation</strong></td>
+<td><code>wiki/sources/Decks &lt;year&gt;.md</code></td>
+<td><strong>Yes — Deck node + <code>aboutEntity</code> edges</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Sessions and Decks are the events researchers most want to query historically: <em>"all sessions about CSCL last semester"</em>, <em>"every deck I made about the AERA-NSF proposal"</em>. Activity logs and organize-runs are operational ephemera; their value lives in the daily file, not in cross-time joins.</p>
+<h3 id="three-new-entity-types">Three new entity types</h3>
+<ul>
+<li><strong>Session</strong> — <code>vault:session/&lt;YYYY-MM-DD&gt;-&lt;HHMM&gt;-&lt;source&gt;-&lt;sid8&gt;</code>. Properties: <code>date</code>, <code>ts_start</code>, <code>ts_end</code>, <code>source</code> (claude/codex), <code>sid</code> (8-char), <code>topic</code>. One per <code>##</code> heading in <code>wiki/sources/Sessions YYYY-MM-DD.md</code>.</li>
+<li><strong>Deck</strong> — <code>vault:deck/&lt;YYYY-MM-DD&gt;-&lt;topic-slug&gt;</code>. Properties: <code>date</code>, <code>skill</code> (open-design skill id), <code>topic</code>, <code>summary</code>. One per row in <code>wiki/sources/Decks YYYY.md</code>.</li>
+<li><strong>Fold</strong> — <code>vault:fold/&lt;sessions|decks&gt;-&lt;YYYY-MM&gt;</code>. A monthly compaction node that holds all Session/Deck items older than a threshold (default 30 days). Members get a <code>partOfFold</code> edge. Visualizations can hide the underlying nodes by default.</li>
+</ul>
+<h3 id="three-new-relations">Three new relations</h3>
+<ul>
+<li><strong><code>aboutEntity</code></strong> — Session/Deck → Project/Grant/Concept/Course/Manuscript/Person/Lab. Auto-extracted from the section body's <code>&lt;span class="wikilink"&gt;wikilinks&lt;/span&gt;</code> and word-boundary matches against ontology labels.</li>
+<li><strong><code>producedBy</code></strong> — Session/Deck → Person. The user (or other contributor). Currently inferred as the vault owner.</li>
+<li><strong><code>partOfFold</code></strong> — Session/Deck → Fold. Set during the age-based compaction pass.</li>
+</ul>
+<h3 id="why-fold-compaction-matters">Why fold compaction matters</h3>
+<p>Without retention, every 2-hour tick adds Session nodes indefinitely. After a year that's 1500-3000 nodes just from session digests, drowning out the 200 substantive entities. Fold compaction:</p>
+<ol>
+<li>After main extraction, scan all Session and Deck nodes.</li>
+<li>Group by year-month. Anything older than 30 days gets a <code>partOfFold</code> edge to <code>vault:fold/&lt;sessions|decks&gt;-&lt;YYYY-MM&gt;</code>.</li>
+<li>Mark the original node <code>properties.folded = true</code> so the D3 viz can filter it out by default.</li>
+<li>The Fold node itself carries <code>member_count</code> for stats.</li>
+</ol>
+<p>Effect: the live graph stays roughly stable in size (200-300 nodes) regardless of how long the system runs, while the full history remains queryable by un-hiding folded nodes.</p>
+<h3 id="querying-the-event-hub">Querying the event-hub</h3>
+<pre><code class="language-bash"># All sessions about MyProject in the last month
+python query_ontology.py &quot;MyProject&quot; | grep -A 40 &quot;&lt;-aboutEntity&quot;
+
+# All decks (any topic, any time)
+python query_ontology.py --type Deck
+
+# Everything that touched Bayesian Causal Forest (sessions + decks + projects)
+python query_ontology.py &quot;Bayesian Causal Forest&quot;
+
+# Total work artifacts about a project: count of aboutEntity edges
+python query_ontology.py --predicate aboutEntity | grep MyProject | wc -l
+</code></pre>
+<p>The vault-text-as-snapshot model still works for entities, but Sessions/Decks add a temporal layer where the ontology now answers <em>"what did I produce about X, and when?"</em> — a question the flat vault structure couldn't reach.</p>
+<h3 id="tradeoff-for-guide-adopters">Tradeoff for guide adopters</h3>
+<p>If you're starting fresh, decide:
+- <strong>Light</strong> (this guide's default): Sessions + Decks as nodes, 30-day fold. Keeps graph navigable, supports historical queries on the two artifact types most worth tracking.
+- <strong>Heavy</strong>: also node SituationChange, OrganizedFile, dailyActivitySummary. Graph triples in a year reach ~50K. You'll need a real triple store (e.g. Apache Jena, Neo4j) and the D3 viz becomes inadequate. Useful only if you genuinely need cross-event SPARQL ("which projects had a deadline-update AND a session in the same week?"). Most researchers don't.
+- <strong>None</strong>: keep the original snapshot-only ontology. Simplest, but you lose the unified-history query.</p>
+<p>The light setting is the best fit for the audience this guide targets: a single researcher who wants to retrieve historical work without standing up an RDF stack.</p>
+<h2 id="12-why-this-works-design-notes">12. Why this works (design notes)</h2>
+<ul>
+<li><strong>Single entry point removes search.</strong> Researchers waste 30+ min/day re-finding context. <code>Today.md</code> is the universal landing — every session, every agent, every "where was I?" question starts here.</li>
+<li><strong>Persistent memory beats prompt engineering.</strong> Putting facts about your projects in <code>~\.claude\projects\&lt;machine&gt;\memory\</code> means every session loads them automatically; no re-explaining "I'm an academic researcher who works on…".</li>
+<li><strong>Ontology over flat tags.</strong> A type-and-relation graph (Project hasPI Person, Project usesMethod Concept, Person advises Person) is queryable in ways flat tags aren't. <code>who is the PI of every grant I'm on?</code> is one SPARQL/CLI query.</li>
+<li><strong>LLM at the edges, not the center.</strong> The orchestrator is plain Python/PowerShell. LLM is called only at decision points (situation judgment, file routing, slide generation). Most of the system runs free, and the LLM cost is bounded by triage filters.</li>
+<li><strong>Conservative auto-apply.</strong> Every LLM-proposed change has a confidence score and a <code>[REVIEW]</code> fallback. Auto-applies only the boring cases (date updates, status flips). The system never silently rewrites your interpretive content.</li>
+<li><strong>Reversible operations.</strong> Desktop moves have undo. Frontmatter updates leave audit trail in <code>wiki/log.md</code>. Ontology is regenerated, not edited — you can always rebuild from source.</li>
+<li><strong>Composable.</strong> Every script is a single file. Each does one thing. The tracker is a 200-line orchestrator. You can fork any piece without touching the rest.</li>
+</ul>
+<h2 id="13-repository-layout-suggested">13. Repository layout (suggested)</h2>
+<pre><code>research-assistant-system/
+├── README.md             ← this guide
+├── ObsidianVault/
+│   ├── CLAUDE.md
+│   ├── wiki/
+│   │   ├── Today.md      (template)
+│   │   ├── concepts/
+│   │   │   └── Vault Ontology.md
+│   │   └── ...
+│   └── scripts/
+│       ├── daily_tracker.ps1
+│       ├── build_ontology.py
+│       ├── query_ontology.py
+│       ├── digest_session.py
+│       ├── situation_watch.py
+│       ├── apply_situation.py
+│       ├── organize_desktop.py
+│       ├── update_today.ps1
+│       ├── save_session.ps1
+│       ├── codex_digest.ps1
+│       ├── collect_github.ps1
+│       ├── collect_calendar.ps1
+│       ├── collect_notes.ps1
+│       └── collect_social.ps1
+├── claude-config/
+│   ├── settings.json     (Stop hook excerpt)
+│   └── commands/
+│       ├── slides.md
+│       └── recall.md
+└── examples/
+    ├── entity-page-template.md
+    ├── concept-page-template.md
+    └── sample-ontology-graph.html
+</code></pre>
+<h2 id="14-acknowledgements">14. Acknowledgements</h2>
+<ul>
+<li><a href="https://github.com/AgriciDaniel/claude-obsidian">claude-obsidian</a> — the seed vault structure and the LLM Wiki Pattern.</li>
+<li><a href="https://github.com/nexu-io/open-design">nexu-io/open-design</a> — slide-deck skill specs (magazine / pitch / blueprint / course / launch). Cached SKILL.md + template HTML referenced read-only; no code from open-design runs in this system.</li>
+<li>BERTopic, sentence-transformers — for the topic-clustering layer that complements the ontology when categorical analysis is needed.</li>
+</ul>
+<h2 id="15-design-rationale-and-evidence-base">15. Design rationale and evidence base</h2>
+<p>Each decision below is deliberate. This section ties the choices to published work so you can evaluate — or challenge — them rather than take them on faith. The beginner tutorial omits this layer to stay actionable; it lives here.</p>
+<p><strong>Single entry point over search.</strong> <code>Today.md</code> exists because resuming an interrupted task is expensive. In Mark, Gudith, and Klocke's (2008) field study of information workers, people who were interrupted compensated by working faster but did so under measurably higher stress, frustration, and effort; related work in the same research program puts the time to fully resume an interrupted task at roughly 20+ minutes. A fixed landing page removes the repeated "where did I leave off?" search at every context switch.</p>
+<p><strong>Persistent memory over re-prompting.</strong> Putting durable facts in <code>~\.claude\projects\&lt;machine&gt;\memory\</code> mirrors the memory-tiering idea formalized in MemGPT, which pages information between a small in-context window and a larger external store so an agent retains knowledge across sessions (Packer et al., 2023). The situation-watch loop — observe new notes, synthesize a judged change, write it back — is the observe → reflect → retrieve cycle that let the agents in Park et al. (2023) stay coherent over long horizons.</p>
+<p><strong>Ontology over flat tags.</strong> A typed entity–relation graph (Project <code>hasPI</code> Person, Person <code>advisedBy</code> Person) answers queries that flat tags cannot ("who is the PI of every grant I'm on?"). That is the defining advantage of the knowledge-graph data model surveyed by Hogan et al. (2021), and the reason the export uses standard vocabularies — JSON-LD (W3C, 2020) with FOAF and SKOS terms and schema.org types — instead of a bespoke format. The interactive graph is drawn with D3 (Bostock, Ogievetsky, &amp; Heer, 2011).</p>
+<p><strong>LLM at the edges, not the center.</strong> The orchestrator is plain Python/PowerShell; the model is invoked only at judgment points (situation triage, file routing). Using a strong model to score or classify candidates is the LLM-as-judge pattern, which Zheng et al. (2023) found agrees with human preference over 80% of the time on open-ended tasks — sufficient for "is this a deadline change?" while staying cheap and bounded by triage filters. The same paper documents position, verbosity, and self-enhancement biases, which is why auto-apply stays conservative (§5.4, §8).</p>
+<p><strong>Grounding generation in your own corpus.</strong> <code>/slides</code> pulls vault entities and ontology facts before generating, so the deck is conditioned on retrieved, attributable content rather than the model's parametric memory alone — the retrieval-augmented generation approach of Lewis et al. (2020), which improves factuality and supplies provenance for what the output claims.</p>
+<p><strong>Notes as the substrate.</strong> The hand-written entity pages are atomic, densely cross-linked notes in your own words — the Zettelkasten practice systematized for modern tools by Ahrens (2017). The richer the <code>&lt;span class="wikilink"&gt;wikilink&lt;/span&gt;</code> cross-referencing, the better the ontology reconstructs relationships (§5.1). When categorical structure is needed beyond the ontology, topic clustering uses Sentence-BERT embeddings (Reimers &amp; Gurevych, 2019) with BERTopic (Grootendorst, 2022).</p>
+<h2 id="16-references-and-further-reading">16. References and further reading</h2>
+<p><strong>Primary literature</strong></p>
+<ol>
+<li>Mark, G., Gudith, D., &amp; Klocke, U. (2008). The cost of interrupted work: More speed and stress. <em>Proceedings of CHI 2008</em>, 107–110. <a href="https://ics.uci.edu/~gmark/chi08-mark.pdf">https://ics.uci.edu/~gmark/chi08-mark.pdf</a></li>
+<li>Packer, C., Fang, V., Patil, S. G., Lin, K., Wooders, S., &amp; Gonzalez, J. E. (2023). MemGPT: Towards LLMs as operating systems. <em>arXiv:2310.08560</em>. <a href="https://arxiv.org/abs/2310.08560">https://arxiv.org/abs/2310.08560</a></li>
+<li>Park, J. S., O'Brien, J., Cai, C. J., Morris, M. R., Liang, P., &amp; Bernstein, M. S. (2023). Generative agents: Interactive simulacra of human behavior. <em>Proceedings of UIST 2023</em>. <a href="https://arxiv.org/abs/2304.03442">https://arxiv.org/abs/2304.03442</a></li>
+<li>Hogan, A., Blomqvist, E., Cochez, M., et al. (2021). Knowledge graphs. <em>ACM Computing Surveys, 54</em>(4), Article 71. <a href="https://doi.org/10.1145/3447772">https://doi.org/10.1145/3447772</a></li>
+<li>Zheng, L., Chiang, W.-L., Sheng, Y., et al. (2023). Judging LLM-as-a-judge with MT-Bench and Chatbot Arena. <em>Advances in Neural Information Processing Systems 36 (NeurIPS 2023)</em>. <a href="https://arxiv.org/abs/2306.05685">https://arxiv.org/abs/2306.05685</a></li>
+<li>Lewis, P., Perez, E., Piktus, A., et al. (2020). Retrieval-augmented generation for knowledge-intensive NLP tasks. <em>Advances in Neural Information Processing Systems 33 (NeurIPS 2020)</em>. <a href="https://ai.meta.com/research/publications/retrieval-augmented-generation-for-knowledge-intensive-nlp-tasks/">https://ai.meta.com/research/publications/retrieval-augmented-generation-for-knowledge-intensive-nlp-tasks/</a></li>
+<li>Reimers, N., &amp; Gurevych, I. (2019). Sentence-BERT: Sentence embeddings using Siamese BERT-networks. <em>Proceedings of EMNLP-IJCNLP 2019</em>, 3982–3992. <a href="https://aclanthology.org/D19-1410/">https://aclanthology.org/D19-1410/</a></li>
+<li>Grootendorst, M. (2022). BERTopic: Neural topic modeling with a class-based TF-IDF procedure. <em>arXiv:2203.05794</em>. <a href="https://arxiv.org/abs/2203.05794">https://arxiv.org/abs/2203.05794</a></li>
+<li>Bostock, M., Ogievetsky, V., &amp; Heer, J. (2011). D³: Data-driven documents. <em>IEEE Transactions on Visualization and Computer Graphics, 17</em>(12), 2301–2309. <a href="https://doi.org/10.1109/TVCG.2011.185">https://doi.org/10.1109/TVCG.2011.185</a></li>
+<li>Ahrens, S. (2017). <em>How to take smart notes</em>. Sönke Ahrens. <a href="https://www.soenkeahrens.de/en/takesmartnotes">https://www.soenkeahrens.de/en/takesmartnotes</a></li>
+</ol>
+<p><strong>Tools and standards</strong></p>
+<ol start="11">
+<li>Claude Code documentation. <a href="https://code.claude.com/docs/en/overview">https://code.claude.com/docs/en/overview</a></li>
+<li>Obsidian. <a href="https://obsidian.md">https://obsidian.md</a></li>
+<li>OpenRouter API documentation. <a href="https://openrouter.ai/docs">https://openrouter.ai/docs</a></li>
+<li>W3C (2020). <em>JSON-LD 1.1: A JSON-based serialization for linked data</em>. <a href="https://www.w3.org/TR/json-ld11/">https://www.w3.org/TR/json-ld11/</a></li>
+<li>W3C (2009). <em>SKOS Simple Knowledge Organization System reference</em>. <a href="https://www.w3.org/TR/skos-reference/">https://www.w3.org/TR/skos-reference/</a></li>
+<li><em>FOAF vocabulary specification</em>. <a href="http://xmlns.com/foaf/spec/">http://xmlns.com/foaf/spec/</a></li>
+<li><em>schema.org vocabulary</em>. <a href="https://schema.org/">https://schema.org/</a></li>
+</ol>
+<hr />
+<p><em>This guide describes a working system in production for a single researcher's portfolio (dozens of projects and grants). Numbers reported (~197 ontology nodes, 2200+ edges, ~$0.02-0.05/day LLM cost) are real measurements as of 2026-05-02. Adapt thresholds and skill choices to your scale.</em></p>
+    <div class="closing">
+      <div class="closing-mark">— End of full reference —</div>
+      <div class="closing-note">New to the setup? Start with the <a class="wikilink" href="index.html">beginner tutorial</a>.</div>
+    </div>
+  </article>
+</div>
+
+<script>
+document.addEventListener('keydown', function(e) {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'f' || e.key === 'F') document.body.classList.toggle('narrow');
+  if (e.key === 'd' || e.key === 'D') document.body.classList.toggle('dark');
+});
+</script>
+</body>
+</html>

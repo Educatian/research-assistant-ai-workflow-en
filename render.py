@@ -899,7 +899,7 @@ def render(md_path: Path, out_path: Path) -> None:
     {body_html}
     <div class="closing">
       <div class="closing-mark">— end of 7-day guide —</div>
-      <div class="closing-note">Stuck? Full guide (<span class="wikilink">Research Assistant System Guide</span>). Happy building!</div>
+      <div class="closing-note">Stuck? Read the full guide (<a class="wikilink" href="full-guide.html" style="text-decoration:none">Research Assistant System Guide</a>) — every component in detail. Happy building!</div>
       {f'''<div class="closing-author">
         <span class="closing-author-label">Author</span>
         <strong>{htmllib.escape(author)}</strong>
